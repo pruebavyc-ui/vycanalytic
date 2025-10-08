@@ -1,7 +1,8 @@
 import logo from '../assets/logo.png'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 export default function Sidebar({ user, onLogout }:{ user:any, onLogout?: ()=>void }) {
+  const navigate = useNavigate()
   const linkClass = ({ isActive }:{ isActive: boolean }) =>
     `flex items-center gap-2 px-3 py-2 rounded-md transition duration-150 ease-in-out ${isActive ? 'bg-sky-100 text-sky-700' : 'text-gray-700 hover:bg-sky-50 hover:translate-x-1 transform'}`
 
@@ -41,7 +42,11 @@ export default function Sidebar({ user, onLogout }:{ user:any, onLogout?: ()=>vo
         <div className="mt-2 text-sm font-medium text-center">{user?.name}</div>
         <div className="text-xs text-gray-500 text-center">{user?.role}</div>
         <button
-          onClick={onLogout}
+          onClick={() => {
+            if (onLogout) onLogout()
+            try { localStorage.removeItem('user') } catch (e) { /* ignore */ }
+            navigate('/login', { replace: true })
+          }}
           className="mt-3 px-3 py-2 bg-red-50 text-red-600 rounded-md hover:bg-red-100 transition duration-150"
         >
           Cerrar sesión

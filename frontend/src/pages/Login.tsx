@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import sample from '../data/sample.json'
 
@@ -12,6 +13,17 @@ type User = {
 }
 
 export default function Login({ onLogin }:{ onLogin: (user: User)=>void }) {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('user')
+      if (raw) {
+        // if already logged in, redirect to dashboard
+        navigate('/dashboard', { replace: true })
+      }
+    } catch (e) { /* ignore */ }
+  }, [])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -23,6 +35,7 @@ export default function Login({ onLogin }:{ onLogin: (user: User)=>void }) {
     const found = users.find(u => u.email === email && u.password === password)
     if (found) {
       onLogin(found)
+      navigate('/dashboard', { replace: true })
     } else {
       setError('Correo o contraseña incorrectos')
     }

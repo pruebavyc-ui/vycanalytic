@@ -8,25 +8,46 @@ import IngresarReportes from './pages/IngresarReportes'
 import ExportarReportes from './pages/ExportarReportes'
 import IngresarUsuarios from './pages/IngresarUsuarios'
 
-function App() {
-  const [user, setUser] = useState<any | null>(null)
-
-  const handleLogin = (u: any) => setUser(u)
-  const handleLogout = () => setUser(null)
-
+function ProtectedRoute({ user, children }:{ user:any, children: any }) {
   if (!user) {
-    return <Login onLogin={handleLogin} />
+    return <Navigate to="/login" replace />
+  }
+  return children
+}
+
+function App() {
+  // persist user in localStorage so reloads keep the session
+  const [user, setUser] = useState<any | null>(() => {
+    try {
+      const raw = localStorage.getItem('user')
+      return raw ? JSON.parse(raw) : null
+    } catch (e) {
+      return null
+    }
+  })
+
+  const handleLogin = (u: any) => {
+    setUser(u)
+    try { localStorage.setItem('user', JSON.stringify(u)) } catch (e) { /* ignore */ }
+  }
+
+  const handleLogout = () => {
+    setUser(null)
+    try { localStorage.removeItem('user') } catch (e) { /* ignore */ }
   }
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/dashboard" element={<Dashboard user={user} onLogout={handleLogout} />} />
-        <Route path="/clientes" element={<Clientes user={user} onLogout={handleLogout} />} />
-        <Route path="/ingresar-reportes" element={<IngresarReportes user={user} onLogout={handleLogout} />} />
-        <Route path="/exportar-reportes" element={<ExportarReportes user={user} onLogout={handleLogout} />} />
-        <Route path="/ingresar-usuarios" element={<IngresarUsuarios user={user} onLogout={handleLogout} />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+
+        <Route path="/dashboard" element={<ProtectedRoute user={user}><Dashboard user={user} onLogout={handleLogout} /></ProtectedRoute>} />
+        <Route path="/clientes" element={<ProtectedRoute user={user}><Clientes user={user} onLogout={handleLogout} /></ProtectedRoute>} />
+        <Route path="/ingresar-reportes" element={<ProtectedRoute user={user}><IngresarReportes user={user} onLogout={handleLogout} /></ProtectedRoute>} />
+        <Route path="/exportar-reportes" element={<ProtectedRoute user={user}><ExportarReportes user={user} onLogout={handleLogout} /></ProtectedRoute>} />
+        <Route path="/ingresar-usuarios" element={<ProtectedRoute user={user}><IngresarUsuarios user={user} onLogout={handleLogout} /></ProtectedRoute>} />
+
         <Route path="*" element={<div className="p-8">Página no encontrada</div>} />
       </Routes>
     </BrowserRouter>
