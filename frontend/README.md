@@ -71,3 +71,24 @@ export default defineConfig([
   },
 ])
 ```
+
+## Routing / Run notes
+
+To enable routing with react-router-dom and run the dev server, from the `frontend` folder run:
+
+1. Install dependencies:
+
+   npm install
+
+2. Install react-router-dom:
+
+   npm install react-router-dom
+
+   # Optional: TypeScript types
+   npm install -D @types/react-router-dom
+
+3. Start dev server:
+
+   npm run dev
+
+If you get type errors referencing react-router-dom, ensure the package and types are installed.

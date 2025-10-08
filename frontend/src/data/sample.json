@@ -1,0 +1,132 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "name": "Jeremias",
+      "email": "mezasuarez03@gmail.com",
+      "role": "admin",
+      "password": "admin123",
+      "companyId": null
+    },
+    {
+      "id": "u2",
+      "name": "Technician One",
+      "email": "tech1@example.com",
+      "role": "client",
+      "password": "tech123",
+      "companyId": "c1"
+    }
+  ],
+  "companies": [
+    {
+      "id": "c1",
+      "name": "Empresa Demo",
+      "ruc_or_identifier": "123456789",
+      "address": "Av. Principal 123",
+      "contact_person": "Carlos Perez",
+      "contact_email": "contacto@empresa.com"
+    }
+  ],
+  "machines": [
+    {
+      "id": "m1",
+      "companyId": "c1",
+      "name": "Maquina 1",
+      "serial": "SN001",
+      "location": "Planta A",
+      "model": "Model X"
+    },
+    {
+      "id": "m2",
+      "companyId": "c1",
+      "name": "Maquina 2",
+      "serial": "SN002",
+      "location": "Planta B",
+      "model": "Model Y"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r1",
+      "title": "Reporte de Mantenimiento 1",
+      "companyId": "c1",
+      "machineId": "m1",
+      "reportNumber": "001",
+      "route": "R-001",
+      "planNumber_or_OT": "OT-101",
+      "areas": ["Area 1", "Area 2"],
+      "plant": "Planta A",
+      "reportDate": "2025-10-08",
+      "addressedTo": "Gerencia Técnica",
+      "presentedBy": "Technician One",
+      "reviewedBy": "Admin User",
+      "createdByUserId": "u2",
+      "generalRecommendations": [
+        {
+          "to": "Gerencia Técnica",
+          "analyzedBy": "Technician One",
+          "date": "2025-10-08",
+          "text": "Se recomienda revisión mensual de componentes críticos."
+        }
+      ],
+      "observations": [
+        {
+          "authorUserId": "u2",
+          "date": "2025-10-08",
+          "text": "Se observó desgaste en correa principal."
+        }
+      ],
+      "items": [
+        {
+          "itemNumber": 1,
+          "tagOrDescription": "Motor Principal",
+          "conditionBefore": "Bueno",
+          "conditionAfter": "Regular",
+          "diagnosis": "Desgaste leve detectado",
+          "recommendation": "Lubricar y revisar cada 2 semanas",
+          "images": [
+            "https://via.placeholder.com/150",
+            "https://via.placeholder.com/150"
+          ]
+        },
+        {
+          "itemNumber": 2,
+          "tagOrDescription": "Bomba Hidráulica",
+          "conditionBefore": "Regular",
+          "conditionAfter": "Regular",
+          "diagnosis": "Funcionando con leve ruido",
+          "recommendation": "Monitorear vibraciones",
+          "images": [
+            "https://via.placeholder.com/150"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "r2",
+      "title": "Reporte de Mantenimiento 2",
+      "companyId": "c1",
+      "machineId": "m2",
+      "reportNumber": "002",
+      "route": "R-002",
+      "planNumber_or_OT": "OT-102",
+      "areas": ["Area 3"],
+      "plant": "Planta B",
+      "reportDate": "2025-10-08",
+      "addressedTo": "Gerencia Técnica",
+      "presentedBy": "Technician One",
+      "reviewedBy": "Admin User",
+      "createdByUserId": "u2",
+      "generalRecommendations": [
+        {
+          "to": "Gerencia Técnica",
+          "analyzedBy": "Technician One",
+          "date": "2025-10-08",
+          "text": "Se recomienda cambio de filtros de aceite cada 3 meses."
+        }
+      ],
+      "observations": [],
+      "items": []
+    }
+  ]
+}
