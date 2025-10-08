@@ -1,6 +1,6 @@
 import './App.css'
 import { useState } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Clientes from './pages/Clientes'
@@ -37,7 +37,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
@@ -50,7 +50,7 @@ function App() {
 
         <Route path="*" element={<div className="p-8">Página no encontrada</div>} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
