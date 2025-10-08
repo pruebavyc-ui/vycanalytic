@@ -3,10 +3,7 @@
   "builds": [
     { "src": "frontend/package.json", "use": "@vercel/static-build" }
   ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "probes": [
-    { "path": "/", "mustContain": "<title" }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
