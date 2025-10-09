@@ -1,0 +1,617 @@
+﻿[
+    {
+        "id":  "r1",
+        "title":  "Mantenimiento Preventivo - Motor TrifÃ¡sico",
+        "companyId":  "c1",
+        "branchId":  "s1",
+        "machineId":  "m1",
+        "reportNumber":  "MNT-2025-001",
+        "route":  "R-001",
+        "planNumber_or_OT":  "OT-2025-101",
+        "areas":  [
+                      "Ãrea ElÃ©ctrica",
+                      "Ãrea MecÃ¡nica"
+                  ],
+        "plant":  "Planta Lima Norte",
+        "reportDate":  "2025-10-01",
+        "addressedTo":  "Gerencia de Mantenimiento",
+        "presentedBy":  "Ing. Carlos Mendoza",
+        "reviewedBy":  "Ing. Supervisor TÃ©cnico",
+        "createdByUserId":  "00001",
+        "generalRecommendations":  [
+                                       {
+                                           "to":  "Gerencia de Mantenimiento",
+                                           "analyzedBy":  "Ing. Carlos Mendoza",
+                                           "date":  "2025-10-01",
+                                           "text":  "Se recomienda continuar con mantenimiento preventivo trimestral. Monitorear vibraciones mensualmente."
+                                       }
+                                   ],
+        "observations":  [
+                             {
+                                 "authorUserId":  "00001",
+                                 "date":  "2025-10-01",
+                                 "text":  "Motor operando dentro de parÃ¡metros normales. Resistencia de aislamiento en niveles Ã³ptimos."
+                             }
+                         ],
+        "items":  [
+                      {
+                          "itemNumber":  1,
+                          "tagOrDescription":  "Rodamientos Motor ABB",
+                          "conditionBefore":  "Bueno",
+                          "conditionAfter":  "Excelente",
+                          "diagnosis":  "LubricaciÃ³n correcta, sin desgaste anormal",
+                          "recommendation":  "Continuar con lubricaciÃ³n cada 3 meses usando grasa Shell Alvania EP2",
+                          "images":  [
+                                         "https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Rodamiento+Lado+A",
+                                         "https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Rodamiento+Lado+B"
+                                     ]
+                      },
+                      {
+                          "itemNumber":  2,
+                          "tagOrDescription":  "Bobinado Estator",
+                          "conditionBefore":  "Bueno",
+                          "conditionAfter":  "Bueno",
+                          "diagnosis":  "Resistencia de aislamiento: 520 MÎ© - Conforme",
+                          "recommendation":  "Realizar megado semestral",
+                          "images":  [
+                                         "https://via.placeholder.com/300x200/50C878/FFFFFF?text=TermografÃ­a+OK",
+                                         "https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Rodamiento+Lado+B"
+                                     ]
+                      }
+                  ]
+    },
+    {
+        "id":  "r2",
+        "title":  "InspecciÃ³n TermogrÃ¡fica - Motor Principal",
+        "companyId":  "c1",
+        "branchId":  "s1",
+        "machineId":  "m1",
+        "reportNumber":  "MNT-2025-002",
+        "route":  "R-001",
+        "planNumber_or_OT":  "OT-2025-102",
+        "areas":  [
+                      "Ãrea ElÃ©ctrica"
+                  ],
+        "plant":  "Planta Lima Norte",
+        "reportDate":  "2025-10-05",
+        "addressedTo":  "Gerencia de Mantenimiento",
+        "presentedBy":  "Ing. MarÃ­a GarcÃ­a",
+        "reviewedBy":  "Ing. Supervisor TÃ©cnico",
+        "createdByUserId":  "00001",
+        "generalRecommendations":  [
+                                       {
+                                           "to":  "Gerencia de Mantenimiento",
+                                           "analyzedBy":  "Ing. MarÃ­a GarcÃ­a",
+                                           "date":  "2025-10-05",
+                                           "text":  "Realizar inspecciones termogrÃ¡ficas bimestrales en bornes de alta corriente."
+                                       }
+                                   ],
+        "observations":  [
+                             {
+                                 "authorUserId":  "00001",
+                                 "date":  "2025-10-05",
+                                 "text":  "Detectado punto caliente en bornes de fase R. Temperatura normalizada despuÃ©s de intervenciÃ³n."
+                             }
+                         ],
+        "items":  [
+                      {
+                          "itemNumber":  1,
+                          "tagOrDescription":  "Bornes de ConexiÃ³n Fase R",
+                          "conditionBefore":  "Regular - 85Â°C",
+                          "conditionAfter":  "Bueno - 62Â°C",
+                          "diagnosis":  "Aflojamiento de tornillos de fijaciÃ³n causando resistencia de contacto elevada",
+                          "recommendation":  "Revisar apriete de bornes cada 2 meses. Aplicar torque de 45 Nm",
+                          "images":  [
+                                         "https://via.placeholder.com/300x200/FF6B6B/FFFFFF?text=TermografÃ­a+Antes",
+                                         "https://via.placeholder.com/300x200/50C878/FFFFFF?text=TermografÃ­a+DespuÃ©s"
+                                     ]
+                      }
+                  ]
+    },
+    {
+        "id":  "r3",
+        "title":  "RevisiÃ³n de Sistema de Aire - Compresor",
+        "companyId":  "c1",
+        "branchId":  "s1",
+        "machineId":  "m2",
+        "reportNumber":  "MNT-2025-003",
+        "route":  "R-002",
+        "planNumber_or_OT":  "OT-2025-103",
+        "areas":  [
+                      "Ãrea MecÃ¡nica",
+                      "Ãrea NeumÃ¡tica"
+                  ],
+        "plant":  "Planta Lima Norte",
+        "reportDate":  "2025-09-28",
+        "addressedTo":  "Jefatura de ProducciÃ³n",
+        "presentedBy":  "Tec. Pedro LÃ³pez",
+        "reviewedBy":  "Ing. Jefe de Mantenimiento",
+        "createdByUserId":  "00002",
+        "generalRecommendations":  [
+                                       {
+                                           "to":  "Jefatura de ProducciÃ³n",
+                                           "analyzedBy":  "Tec. Pedro LÃ³pez",
+                                           "date":  "2025-09-28",
+                                           "text":  "Mantener programa de servicio cada 8000 horas. Monitorear consumo energÃ©tico mensualmente."
+                                       }
+                                   ],
+        "observations":  [
+                             {
+                                 "authorUserId":  "00002",
+                                 "date":  "2025-09-28",
+                                 "text":  "Compresor Atlas Copco operando correctamente. PresiÃ³n estable en 8.5 bar."
+                             }
+                         ],
+        "items":  [
+                      {
+                          "itemNumber":  1,
+                          "tagOrDescription":  "Filtros de Aire y Aceite",
+                          "conditionBefore":  "Regular - Saturados",
+                          "conditionAfter":  "Excelente - Nuevos",
+                          "diagnosis":  "Filtros alcanzaron vida Ãºtil de 8000 horas",
+                          "recommendation":  "PrÃ³ximo cambio en 8000 horas o 12 meses",
+                          "images":  [
+                                         "https://via.placeholder.com/300x200/808080/FFFFFF?text=Filtros+Usados",
+                                         "https://via.placeholder.com/300x200/50C878/FFFFFF?text=Filtros+Nuevos"
+                                     ]
+                      },
+                      {
+                          "itemNumber":  2,
+                          "tagOrDescription":  "Aceite SintÃ©tico",
+                          "conditionBefore":  "Regular - Oscurecido",
+                          "conditionAfter":  "Excelente - Nuevo",
+                          "diagnosis":  "Aceite con degradaciÃ³n normal por uso",
+                          "recommendation":  "Utilizar aceite Roto Inject Fluid 2000 Ãºnicamente",
+                          "images":  [
+                                         "https://via.placeholder.com/300x200/8B4513/FFFFFF?text=Aceite+AnÃ¡lisis",
+                                         "https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Rodamiento+Lado+B"
+                                     ]
+                      }
+                  ]
+    },
+    {
+        "id":  "r4",
+        "title":  "ReparaciÃ³n de Fuga - Compresor Industrial",
+        "companyId":  "c1",
+        "branchId":  "s1",
+        "machineId":  "m2",
+        "reportNumber":  "MNT-2025-004",
+        "route":  "R-002",
+        "planNumber_or_OT":  "OT-2025-104",
+        "areas":  [
+                      "Ãrea NeumÃ¡tica"
+                  ],
+        "plant":  "Planta Lima Norte",
+        "reportDate":  "2025-10-07",
+        "addressedTo":  "Jefatura de ProducciÃ³n",
+        "presentedBy":  "Ing. Roberto Silva",
+        "reviewedBy":  "Ing. Jefe de Mantenimiento",
+        "createdByUserId":  "00001",
+        "generalRecommendations":  [
+                                       {
+                                           "to":  "Jefatura de ProducciÃ³n",
+                                           "analyzedBy":  "Ing. Roberto Silva",
+                                           "date":  "2025-10-07",
+                                           "text":  "Monitorear presiÃ³n cada 4 horas hasta reemplazo de vÃ¡lvula. Tener compresor de respaldo disponible."
+                                       }
+                                   ],
+        "observations":  [
+                             {
+                                 "authorUserId":  "00001",
+                                 "date":  "2025-10-07",
+                                 "text":  "Fuga detectada en vÃ¡lvula check. Repuesto en trÃ¡nsito. Sistema operativo con monitoreo continuo."
+                             }
+                         ],
+        "items":  [
+                      {
+                          "itemNumber":  1,
+                          "tagOrDescription":  "VÃ¡lvula Check de Descarga",
+                          "conditionBefore":  "Malo - Con fuga",
+                          "conditionAfter":  "Malo - Pendiente reemplazo",
+                          "diagnosis":  "Asiento de vÃ¡lvula desgastado causando fuga de aire comprimido",
+                          "recommendation":  "Reemplazo urgente con kit original Atlas Copco. ETA: 3 dÃ­as hÃ¡biles",
+                          "images":  [
+                                         "https://via.placeholder.com/300x200/FF6B6B/FFFFFF?text=VÃ¡lvula+Defectuosa",
+                                         "https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Rodamiento+Lado+B"
+                                     ]
+                      }
+                  ]
+    },
+    {
+        "id":  "r5",
+        "title":  "Pruebas DielÃ©ctricas - Transformador",
+        "companyId":  "c1",
+        "branchId":  "s2",
+        "machineId":  "m3",
+        "reportNumber":  "MNT-2025-005",
+        "route":  "R-003",
+        "planNumber_or_OT":  "OT-2025-105",
+        "areas":  [
+                      "Ãrea ElÃ©ctrica",
+                      "SubestaciÃ³n"
+                  ],
+        "plant":  "Planta Lima Sur",
+        "reportDate":  "2025-10-03",
+        "addressedTo":  "Gerencia de Operaciones",
+        "presentedBy":  "Ing. Ana Morales",
+        "reviewedBy":  "Ing. ElÃ©ctrico Senior",
+        "createdByUserId":  "00001",
+        "generalRecommendations":  [
+                                       {
+                                           "to":  "Gerencia de Operaciones",
+                                           "analyzedBy":  "Ing. Ana Morales",
+                                           "date":  "2025-10-03",
+                                           "text":  "Transformador en excelentes condiciones. Continuar con programa de pruebas anuales y anÃ¡lisis de aceite semestral."
+                                       }
+                                   ],
+        "observations":  [
+                             {
+                                 "authorUserId":  "00001",
+                                 "date":  "2025-10-03",
+                                 "text":  "Todas las pruebas elÃ©ctricas dentro de especificaciones del fabricante. Sin anomalÃ­as detectadas."
+                             }
+                         ],
+        "items":  [
+                      {
+                          "itemNumber":  1,
+                          "tagOrDescription":  "Aislamiento Primario-Secundario",
+                          "conditionBefore":  "Excelente",
+                          "conditionAfter":  "Excelente",
+                          "diagnosis":  "Resistencia de aislamiento: 8500 MÎ© - Muy por encima del mÃ­nimo (1000 MÎ©)",
+                          "recommendation":  "Mantener programa de mediciÃ³n anual",
+                          "images":  [
+                                         "https://via.placeholder.com/300x200/50C878/FFFFFF?text=MegÃ³hmetro+8500MÎ©",
+                                         "https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Rodamiento+Lado+B"
+                                     ]
+                      },
+                      {
+                          "itemNumber":  2,
+                          "tagOrDescription":  "Aceite DielÃ©ctrico",
+                          "conditionBefore":  "Bueno",
+                          "conditionAfter":  "Bueno",
+                          "diagnosis":  "Rigidez dielÃ©ctrica: 65 kV (mÃ­nimo 30 kV). Color y aspecto visual: normal",
+                          "recommendation":  "PrÃ³ximo anÃ¡lisis fÃ­sico-quÃ­mico en 6 meses",
+                          "images":  [
+                                         "https://via.placeholder.com/300x200/FFD700/000000?text=Muestra+Aceite+OK",
+                                         "https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Rodamiento+Lado+B"
+                                     ]
+                      },
+                      {
+                          "itemNumber":  3,
+                          "tagOrDescription":  "RelaciÃ³n de TransformaciÃ³n",
+                          "conditionBefore":  "Conforme",
+                          "conditionAfter":  "Conforme",
+                          "diagnosis":  "RelaciÃ³n 55:1 medida vs 55:1 nominal - Perfecta coincidencia",
+                          "recommendation":  "Sin observaciones",
+                          "images":  [
+                                         "https://via.placeholder.com/300x200/FFD700/000000?text=Muestra+Aceite+OK",
+                                         "https://via.placeholder.com/300x200/4A90E2/FFFFFF?text=Rodamiento+Lado+B"
+                                     ]
+                      }
+                  ]
+    },
+    {
+        "id":  "r6",
+        "title":  "AnÃ¡lisis de Aceite - Transformador 1000kVA",
+        "companyId":  "c1",
+        "branchId":  "s2",
+        "machineId":  "m3",
+        "reportNumber":  "MNT-2025-006",
+        "reportDate":  "2025-10-06",
+        "technician":  "Ing. Javier Torres",
+        "status":  "completed",
+        "description":  "AnÃ¡lisis fÃ­sico-quÃ­mico del aceite dielÃ©ctrico: Contenido de agua: 8 ppm (excelente), Acidez: 0.05 mgKOH/g (bueno), Factor de potencia: 0.3% (normal). No se detectaron gases combustibles. Aceite en condiciones Ã³ptimas."
+    },
+    {
+        "id":  "r7",
+        "title":  "InspecciÃ³n de Protecciones - Tablero General",
+        "companyId":  "c1",
+        "branchId":  "s2",
+        "machineId":  "m4",
+        "reportNumber":  "MNT-2025-007",
+        "reportDate":  "2025-09-30",
+        "technician":  "Tec. Carlos Mendoza",
+        "status":  "completed",
+        "description":  "VerificaciÃ³n de relÃ©s de protecciÃ³n, prueba de disparo de interruptores termomagnÃ©ticos, mediciÃ³n de resistencia de tierra (2.3 Î©). Ajuste de selectividad de protecciones. ActualizaciÃ³n de diagramas unifilares."
+    },
+    {
+        "id":  "r8",
+        "title":  "TermografÃ­a Infrarroja - Tablero ElÃ©ctrico",
+        "companyId":  "c1",
+        "branchId":  "s2",
+        "machineId":  "m4",
+        "reportNumber":  "MNT-2025-008",
+        "reportDate":  "2025-10-04",
+        "technician":  "Ing. MarÃ­a GarcÃ­a",
+        "status":  "completed",
+        "description":  "InspecciÃ³n termogrÃ¡fica bajo carga: Detectado punto caliente en barra de fase R (95Â°C). Se realizÃ³ limpieza y reapretÃ© de barras. Reemplazo de contactos de contactor C3. Temperatura normalizada (58Â°C)."
+    },
+    {
+        "id":  "r9",
+        "title":  "AlineaciÃ³n Laser - Bomba CentrÃ­fuga",
+        "companyId":  "c2",
+        "branchId":  "s3",
+        "machineId":  "m5",
+        "reportNumber":  "MNT-2025-009",
+        "reportDate":  "2025-10-02",
+        "technician":  "Ing. Roberto Silva",
+        "status":  "completed",
+        "description":  "AlineaciÃ³n lÃ¡ser de precisiÃ³n eje motor-bomba. DesalineaciÃ³n inicial: angular 0.18mm, paralelo 0.25mm. DespuÃ©s del ajuste: 0.02mm/0.03mm. AnÃ¡lisis de vibraciones: 2.1 mm/s (zona verde ISO 10816). Caudal: 180 mÂ³/h."
+    },
+    {
+        "id":  "r10",
+        "title":  "Cambio de Sellos MecÃ¡nicos - Bomba",
+        "companyId":  "c2",
+        "branchId":  "s3",
+        "machineId":  "m5",
+        "reportNumber":  "MNT-2025-010",
+        "reportDate":  "2025-10-07",
+        "technician":  "Tec. Pedro LÃ³pez",
+        "status":  "completed",
+        "description":  "Reemplazo de sello mecÃ¡nico Grundfos CR 64. Se instalÃ³ kit original, verificaciÃ³n de huelgo axial (0.8mm), limpieza de cÃ¡mara. Prueba hidrÃ¡ulica: sin fugas a 10 bar. Tiempo de ejecuciÃ³n: 6 horas."
+    },
+    {
+        "id":  "r11",
+        "title":  "Rebobinado Preventivo - Motor 75kW",
+        "companyId":  "c2",
+        "branchId":  "s3",
+        "machineId":  "m6",
+        "reportNumber":  "MNT-2025-011",
+        "reportDate":  "2025-09-29",
+        "technician":  "Ing. Javier Torres",
+        "status":  "completed",
+        "description":  "EvaluaciÃ³n de aislamiento: 180 MÎ© (bajo lÃ­mite). Se realizÃ³ rebobinado completo con alambre clase F (155Â°C). Pruebas elÃ©ctricas: resistencia Ã³hmica balanceada, corriente sin carga: 28A. Barnizado y horneado final."
+    },
+    {
+        "id":  "r12",
+        "title":  "AnÃ¡lisis de Vibraciones - Motor Asincrono",
+        "companyId":  "c2",
+        "branchId":  "s3",
+        "machineId":  "m6",
+        "reportNumber":  "MNT-2025-012",
+        "reportDate":  "2025-10-05",
+        "technician":  "Ing. Ana Morales",
+        "status":  "completed",
+        "description":  "Monitoreo predictivo con analizador SKF: Velocidad RMS: 3.2 mm/s, AceleraciÃ³n: 0.8 g. Espectro FFT muestra armÃ³nicos de frecuencia de red. Rodamientos en buenas condiciones. PrÃ³xima mediciÃ³n: 3 meses."
+    },
+    {
+        "id":  "r13",
+        "title":  "ParametrizaciÃ³n - Variador ABB ACS880",
+        "companyId":  "c2",
+        "branchId":  "s4",
+        "machineId":  "m7",
+        "reportNumber":  "MNT-2025-013",
+        "reportDate":  "2025-09-27",
+        "technician":  "Ing. Carlos Mendoza",
+        "status":  "completed",
+        "description":  "ConfiguraciÃ³n de parÃ¡metros PID para control de presiÃ³n. Ajuste de rampa aceleraciÃ³n/desaceleraciÃ³n: 10s/15s. LÃ­mite de corriente: 430A. Frecuencia portadora: 4kHz. Modo de control: Vector sin sensor. Ahorro energÃ©tico estimado: 18%."
+    },
+    {
+        "id":  "r14",
+        "title":  "Reemplazo de Ventiladores - VDF",
+        "companyId":  "c2",
+        "branchId":  "s4",
+        "machineId":  "m7",
+        "reportNumber":  "MNT-2025-014",
+        "reportDate":  "2025-10-06",
+        "technician":  "Tec. Pedro LÃ³pez",
+        "status":  "completed",
+        "description":  "Cambio preventivo de ventiladores de refrigeraciÃ³n del variador. Limpieza de disipadores tÃ©rmicos. Temperatura de operaciÃ³n: IGBT 62Â°C, MÃ³dulo rectificador 58Â°C. Flujo de aire restaurado al 100%."
+    },
+    {
+        "id":  "r15",
+        "title":  "Prueba de BaterÃ­as - Sistema UPS",
+        "companyId":  "c2",
+        "branchId":  "s4",
+        "machineId":  "m8",
+        "reportNumber":  "MNT-2025-015",
+        "reportDate":  "2025-10-01",
+        "technician":  "Ing. Roberto Silva",
+        "status":  "completed",
+        "description":  "Test de descarga al 80% de capacidad: AutonomÃ­a medida 18 minutos (especificaciÃ³n: 15 min). Voltaje por celda: 2.25V promedio. Resistencia interna: conforme. Temperatura: 24Â°C. Banco de baterÃ­as en excelente estado."
+    },
+    {
+        "id":  "r16",
+        "title":  "Mantenimiento Preventivo - UPS Eaton",
+        "companyId":  "c2",
+        "branchId":  "s4",
+        "machineId":  "m8",
+        "reportNumber":  "MNT-2025-016",
+        "reportDate":  "2025-10-08",
+        "technician":  "Ing. Javier Torres",
+        "status":  "pending",
+        "description":  "InspecciÃ³n trimestral programada: Limpieza de filtros de aire, verificaciÃ³n de ventiladores, calibraciÃ³n de sensores de voltaje. Detectado capacitor de filtro con ESR elevado. Repuesto en trÃ¡nsito. Sistema operando normalmente."
+    },
+    {
+        "id":  "r17",
+        "title":  "Mantenimiento Preventivo - Generador CAT",
+        "companyId":  "c3",
+        "branchId":  "s5",
+        "machineId":  "m9",
+        "reportNumber":  "MNT-2025-017",
+        "reportDate":  "2025-09-25",
+        "technician":  "Ing. Pedro LÃ³pez",
+        "status":  "completed",
+        "description":  "Servicio de 500 horas: Cambio de aceite 15W-40 (95L), filtros de aceite, combustible y aire. Ajuste de vÃ¡lvulas, verificaciÃ³n de inyectores. Prueba de carga al 100%: Voltaje 380VÂ±2%, Frecuencia 50HzÂ±0.1%. Consumo: 105 L/h."
+    },
+    {
+        "id":  "r18",
+        "title":  "ReparaciÃ³n de Alternador - Grupo ElectrÃ³geno",
+        "companyId":  "c3",
+        "branchId":  "s5",
+        "machineId":  "m9",
+        "reportNumber":  "MNT-2025-018",
+        "reportDate":  "2025-10-04",
+        "technician":  "Ing. Carlos Mendoza",
+        "status":  "completed",
+        "description":  "Reemplazo de regulador automÃ¡tico de voltaje (AVR) Caterpillar. CalibraciÃ³n de voltaje de salida y frecuencia. VerificaciÃ³n de aislamiento del estator: 1200 MÎ©. Prueba de sincronizaciÃ³n con red: exitosa."
+    },
+    {
+        "id":  "r19",
+        "title":  "MediciÃ³n de Factor de Potencia - Banco",
+        "companyId":  "c3",
+        "branchId":  "s5",
+        "machineId":  "m10",
+        "reportNumber":  "MNT-2025-019",
+        "reportDate":  "2025-10-02",
+        "technician":  "Ing. Ana Morales",
+        "status":  "completed",
+        "description":  "AnÃ¡lisis de calidad de energÃ­a: FP inicial 0.82, despuÃ©s de ajuste 0.96. ReducciÃ³n de corriente reactiva de 145kVAr. CompensaciÃ³n automÃ¡tica mediante controlador ABB RVC-10. THD de corriente: 3.2%. Ahorro mensual estimado: $850."
+    },
+    {
+        "id":  "r20",
+        "title":  "Reemplazo de Condensadores - Banco PFC",
+        "companyId":  "c3",
+        "branchId":  "s5",
+        "machineId":  "m10",
+        "reportNumber":  "MNT-2025-020",
+        "reportDate":  "2025-10-07",
+        "technician":  "Tec. Roberto Silva",
+        "status":  "completed",
+        "description":  "Cambio preventivo de 3 condensadores de 50kVAr (vida Ãºtil cumplida). MediciÃ³n de capacitancia: valores dentro de Â±5%. VerificaciÃ³n de contactores y fusibles. Prueba de conmutaciÃ³n automÃ¡tica: correcta en todos los escalones."
+    },
+    {
+        "id":  "r21",
+        "title":  "Megado y Pruebas - Motor SincrÃ³nico",
+        "companyId":  "c3",
+        "branchId":  "s6",
+        "machineId":  "m11",
+        "reportNumber":  "MNT-2025-021",
+        "reportDate":  "2025-09-30",
+        "technician":  "Ing. MarÃ­a GarcÃ­a",
+        "status":  "completed",
+        "description":  "Pruebas de resistencia de aislamiento: Fase-tierra 2500 MÎ©, Fase-fase 3200 MÎ© (excelente). Ãndice de polarizaciÃ³n: 3.8. MediciÃ³n de resistencia Ã³hmica por fase: 0.24 Î© balanceado. Corriente de excitaciÃ³n: 8.5A a 110Vdc."
+    },
+    {
+        "id":  "r22",
+        "title":  "SincronizaciÃ³n con Red - Motor SincrÃ³nico",
+        "companyId":  "c3",
+        "branchId":  "s6",
+        "machineId":  "m11",
+        "reportNumber":  "MNT-2025-022",
+        "reportDate":  "2025-10-06",
+        "technician":  "Ing. Javier Torres",
+        "status":  "completed",
+        "description":  "Ajuste de secuencia de arranque y sincronizaciÃ³n automÃ¡tica. VerificaciÃ³n de relÃ© de sincronismo: diferencia de fase \u003c10Â°, diferencia de frecuencia \u003c0.2Hz. Factor de potencia en modo sincrÃ³nico: 0.98 adelantado. Eficiencia: 95.2%."
+    },
+    {
+        "id":  "r23",
+        "title":  "InspecciÃ³n Anual - SubestaciÃ³n 24kV",
+        "companyId":  "c3",
+        "branchId":  "s6",
+        "machineId":  "m12",
+        "reportNumber":  "MNT-2025-023",
+        "reportDate":  "2025-10-01",
+        "technician":  "Ing. Carlos Mendoza",
+        "status":  "completed",
+        "description":  "InspecciÃ³n completa con equipo desenergizado: VerificaciÃ³n de interruptores en vacÃ­o, seccionadores, transformadores de medida. Limpieza de aisladoras. TermografÃ­a de barras y conexiones. Prueba de relÃ©s de protecciÃ³n 50/51. Todo conforme."
+    },
+    {
+        "id":  "r24",
+        "title":  "Pruebas de Protecciones - SubestaciÃ³n",
+        "companyId":  "c3",
+        "branchId":  "s6",
+        "machineId":  "m12",
+        "reportNumber":  "MNT-2025-024",
+        "reportDate":  "2025-10-08",
+        "technician":  "Ing. Ana Morales",
+        "status":  "completed",
+        "description":  "CalibraciÃ³n de relÃ©s digitales ABB REF615: Sobrecorriente de fase: 1500A@0.5s, Tierra: 300A@0.3s, Diferencial: 30%In. InyecciÃ³n secundaria de corrientes de prueba. Tiempos de disparo verificados segÃºn curvas IEC. Protocolos aprobados."
+    },
+    {
+        "id":  "r25",
+        "title":  "Tratamiento de Agua - Caldera Industrial",
+        "companyId":  "c4",
+        "branchId":  "s7",
+        "machineId":  "m13",
+        "reportNumber":  "MNT-2025-025",
+        "reportDate":  "2025-09-26",
+        "technician":  "Tec. Pedro LÃ³pez",
+        "status":  "completed",
+        "description":  "AnÃ¡lisis de agua de alimentaciÃ³n: Dureza 85 ppm (alto), pH 7.2. Se ajustÃ³ dosificaciÃ³n de antiincrustante y elevador de pH. Purga de fondo realizada. Nueva mediciÃ³n: Dureza 12 ppm, pH 10.5. Conductividad: 2800 ÂµS/cm."
+    },
+    {
+        "id":  "r26",
+        "title":  "Limpieza de Tubos - Caldera 700HP",
+        "companyId":  "c4",
+        "branchId":  "s7",
+        "machineId":  "m13",
+        "reportNumber":  "MNT-2025-026",
+        "reportDate":  "2025-10-05",
+        "technician":  "Ing. Roberto Silva",
+        "status":  "completed",
+        "description":  "Mantenimiento anual mayor: Limpieza mecÃ¡nica y quÃ­mica de tubos de humo, inspecciÃ³n de refractario, verificaciÃ³n de vÃ¡lvulas de seguridad (calibradas a 125 PSI). Eficiencia medida: 87.3%. Prueba hidrÃ¡ulica a 200 PSI: aprobada sin fugas."
+    },
+    {
+        "id":  "r27",
+        "title":  "Mantenimiento Preventivo - Sistema HVAC",
+        "companyId":  "c4",
+        "branchId":  "s7",
+        "machineId":  "m14",
+        "reportNumber":  "MNT-2025-027",
+        "reportDate":  "2025-10-03",
+        "technician":  "Tec. Javier Torres",
+        "status":  "completed",
+        "description":  "Servicio trimestral: Limpieza de evaporadores y condensadores, cambio de filtros, verificaciÃ³n de niveles de refrigerante R134a (carga completa). MediciÃ³n de presiones: Alta 185 PSI, Baja 68 PSI. Temperatura de suministro: 12Â°C. EER: 11.2."
+    },
+    {
+        "id":  "r28",
+        "title":  "ReparaciÃ³n de Compresor - Chiller",
+        "companyId":  "c4",
+        "branchId":  "s7",
+        "machineId":  "m14",
+        "reportNumber":  "MNT-2025-028",
+        "reportDate":  "2025-10-07",
+        "technician":  "Ing. MarÃ­a GarcÃ­a",
+        "status":  "pending",
+        "description":  "Detectada vibraciÃ³n anormal en compresor scroll #2. AnÃ¡lisis indica falla en rodamiento inferior. Se coordinÃ³ con Carrier para envÃ­o de tÃ©cnico especializado. Sistema operando con compresor #1. Capacidad reducida al 50%. ETA tÃ©cnico: 4 dÃ­as."
+    },
+    {
+        "id":  "r29",
+        "title":  "ParametrizaciÃ³n - Arrancador Suave",
+        "companyId":  "c4",
+        "branchId":  "s8",
+        "machineId":  "m15",
+        "reportNumber":  "MNT-2025-029",
+        "reportDate":  "2025-10-02",
+        "technician":  "Ing. Ana Morales",
+        "status":  "completed",
+        "description":  "ConfiguraciÃ³n de parÃ¡metros de arranque: Voltaje inicial 40%, Rampa de aceleraciÃ³n 15s, LÃ­mite de corriente 3.5xIn. Protecciones tÃ©rmicas ajustadas segÃºn motor. Bypass automÃ¡tico a 95% velocidad. 50 arranques de prueba exitosos."
+    },
+    {
+        "id":  "r30",
+        "title":  "Reemplazo de Tiristores - Altistart 48",
+        "companyId":  "c4",
+        "branchId":  "s8",
+        "machineId":  "m15",
+        "reportNumber":  "MNT-2025-030",
+        "reportDate":  "2025-10-08",
+        "technician":  "Tec. Carlos Mendoza",
+        "status":  "completed",
+        "description":  "Cambio preventivo de mÃ³dulo de potencia (25000 ciclos cumplidos). Se instalaron SCR originales Schneider. VerificaciÃ³n de aislamiento y pruebas funcionales. Registro de parÃ¡metros de corriente en arranque: pico mÃ¡ximo 685A, tiempo 12.3s. OperaciÃ³n normal."
+    },
+    {
+        "id":  "r31",
+        "title":  "InspecciÃ³n TÃ©cnica - Puente GrÃºa 15Ton",
+        "companyId":  "c4",
+        "branchId":  "s8",
+        "machineId":  "m16",
+        "reportNumber":  "MNT-2025-031",
+        "reportDate":  "2025-09-28",
+        "technician":  "Ing. Pedro LÃ³pez",
+        "status":  "completed",
+        "description":  "InspecciÃ³n semestral obligatoria: END por ultrasonido en ganchos (sin grietas), verificaciÃ³n de cables de acero (desgaste \u003c3%), prueba de frenos con carga. MediciÃ³n de deformaciÃ³n de viga principal: dentro de tolerancias. Certificado emitido."
+    },
+    {
+        "id":  "r32",
+        "title":  "Mantenimiento ElÃ©ctrico - GrÃºa Industrial",
+        "companyId":  "c4",
+        "branchId":  "s8",
+        "machineId":  "m16",
+        "reportNumber":  "MNT-2025-032",
+        "reportDate":  "2025-10-06",
+        "technician":  "Ing. Javier Torres",
+        "status":  "completed",
+        "description":  "RevisiÃ³n de sistema elÃ©ctrico: Cambio de escobillas de motores de traslaciÃ³n, ajuste de finales de carrera, verificaciÃ³n de contactores y relÃ©s. MediciÃ³n de resistencia de tierra del trolley: 1.8 Î©. LubricaciÃ³n de reductores planetarios."
+    }
+]

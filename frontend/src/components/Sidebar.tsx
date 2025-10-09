@@ -20,7 +20,11 @@ export default function Sidebar({ user, onLogout }:{ user:any, onLogout?: ()=>vo
           </NavLink>
 
           <NavLink to="/clientes" className={linkClass}>
-            📋 Ver clientes
+            🌡️ Reportes Termográficos
+          </NavLink>
+
+          <NavLink to="/reportes-vibraciones" className={linkClass}>
+            📊 Reportes de Vibraciones
           </NavLink>
 
           <NavLink to="/ingresar-reportes" className={linkClass}>

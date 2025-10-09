@@ -1,0 +1,50 @@
+[
+  {
+    "id": "00001",
+    "name": "Jeremias",
+    "email": "mezasuarez03@gmail.com",
+    "role": "admin",
+    "password": "admin123",
+    "companyId": null
+  },
+  {
+    "id": "00002",
+    "name": "Angel",
+    "email": "angel@gmail.com",
+    "role": "client",
+    "password": "1234",
+    "companyId": "c1"
+  },
+  {
+    "id": "00003",
+    "name": "Luis Rebolledo",
+    "email": "luis.rebolledo@gmail.com",
+    "role": "client",
+    "password": "1234",
+    "companyId": "c2"
+  },
+  {
+    "id": "00004",
+    "name": "Nicolas",
+    "email": "nicolas@gmail.com",
+    "role": "client",
+    "password": "1234",
+    "companyId": "c3"
+  },
+  {
+    "id": "00005",
+    "name": "Jose",
+    "email": "jose@gmail.com",
+    "role": "client",
+    "password": "1234",
+    "companyId": "c4"
+  },
+  {
+    "id": "00006",
+    "name": "Jose",
+    "email": "jose@gmail.com",
+    "role": "client",
+    "password": "1234",
+    "companyId": "c4"
+  }
+]

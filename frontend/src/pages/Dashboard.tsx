@@ -1,6 +1,6 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
-import sample from '../data/sample.json'
+import sample from '../data'
 
 export default function Dashboard({ user, onLogout }:{ user: any, onLogout: ()=>void }) {
   const companiesCount = ((sample as any).companies || []).length

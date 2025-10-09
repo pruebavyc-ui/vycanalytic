@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.png'
-import sample from '../data/sample.json'
+import sample from '../data'
 
 type User = {
   id: string

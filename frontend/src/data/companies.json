@@ -1,0 +1,90 @@
+[
+  {
+    "id": "c1",
+    "name": "Tutelkan S.A.C.",
+    "ruc_or_identifier": "123456789",
+    "address": "Av. Principal 123",
+    "contact_person": "Angel",
+    "contact_email": "contacto@tutelkan.com",
+    "sucursales": [
+      {
+        "id": "s1",
+        "name": "Sucursal Lima Norte",
+        "address": "Av. Los Olivos 100",
+        "mapImage": "/maps/Diseño sin título.png"
+      },
+      {
+        "id": "s2",
+        "name": "Sucursal Lima Sur",
+        "address": "Av. Primavera 400",
+        "mapImage": "/maps/Diseño sin título.png"
+      }
+    ]
+  },
+  {
+    "id": "c2",
+    "name": "VyC Ingenieria",
+    "ruc_or_identifier": "987654321",
+    "address": "Av. Industrial 456",
+    "contact_person": "Luis Rebolledo",
+    "contact_email": "contacto@vyc.com",
+    "sucursales": [
+      {
+        "id": "s3",
+        "name": "Sucursal Santiago Centro",
+        "address": "Calle San Martín 120",
+        "mapImage": "/maps/Diseño sin título.png"
+      },
+      {
+        "id": "s4",
+        "name": "Sucursal Maipú",
+        "address": "Av. Pajaritos 2400",
+        "mapImage": "/maps/Diseño sin título.png"
+      }
+    ]
+  },
+  {
+    "id": "c3",
+    "name": "Galillean S.A.C.",
+    "ruc_or_identifier": "456789123",
+    "address": "Av. Principal 789",
+    "contact_person": "Nicolas",
+    "contact_email": "contacto@galillean.com",
+    "sucursales": [
+      {
+        "id": "s5",
+        "name": "Sucursal Valparaíso",
+        "address": "Av. Errázuriz 500",
+        "mapImage": "/maps/Diseño sin título.png"
+      },
+      {
+        "id": "s6",
+        "name": "Sucursal Viña del Mar",
+        "address": "Calle Álvarez 330",
+        "mapImage": "/maps/Diseño sin título.png"
+      }
+    ]
+  },
+  {
+    "id": "c4",
+    "name": "Manufacturas Paredes E.I.R.L.",
+    "ruc_or_identifier": "321654987",
+    "address": "Av. Principal 321",
+    "contact_person": "Jose",
+    "contact_email": "contacto@manufacturasparedes.com",
+    "sucursales": [
+      {
+        "id": "s7",
+        "name": "Sucursal Concepción",
+        "address": "Av. Paicaví 777",
+        "mapImage": "/maps/Diseño sin título.png"
+      },
+      {
+        "id": "s8",
+        "name": "Sucursal Talcahuano",
+        "address": "Camino Hualpén 2150",
+        "mapImage": "/maps/Diseño sin título.png"
+      }
+    ]
+  }
+]

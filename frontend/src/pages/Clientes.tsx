@@ -1,6 +1,6 @@
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
-import sample from '../data/sample.json'
+import sample from '../data'
 import { useState } from 'react'
 
 type User = {
@@ -118,7 +118,7 @@ export default function Clientes({ user, onLogout }:{ user:any, onLogout?: ()=>v
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar title="Ver clientes" />
+      <Navbar title="Reportes Termográficos" />
 
       <div className="flex pt-24">
         {user?.role === 'admin' && <Sidebar user={user} onLogout={onLogout} />}

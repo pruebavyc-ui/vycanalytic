@@ -1,0 +1,146 @@
+[
+  {
+    "id": "m1",
+    "companyId": "c1",
+    "branchId": "s1",
+    "name": "Motor Trifásico Principal",
+    "serial": "MTR-TRI-5574",
+    "location": "Planta Lima Norte",
+    "model": "ABB M3BP 280 SMB4 - 90kW"
+  },
+  {
+    "id": "m2",
+    "companyId": "c1",
+    "branchId": "s1",
+    "name": "Compresor de Aire Industrial",
+    "serial": "CMP-AIR-3821",
+    "location": "Planta Lima Norte",
+    "model": "Atlas Copco GA 75 VSD"
+  },
+  {
+    "id": "m3",
+    "companyId": "c1",
+    "branchId": "s2",
+    "name": "Transformador de Potencia",
+    "serial": "TRF-POT-9012",
+    "location": "Planta Lima Sur",
+    "model": "Siemens 1000 kVA 22/0.4kV"
+  },
+  {
+    "id": "m4",
+    "companyId": "c1",
+    "branchId": "s2",
+    "name": "Tablero Eléctrico General",
+    "serial": "TBL-GEN-6745",
+    "location": "Planta Lima Sur",
+    "model": "Schneider Electric Prisma Plus P"
+  },
+  {
+    "id": "m5",
+    "companyId": "c2",
+    "branchId": "s3",
+    "name": "Bomba Centrífuga Industrial",
+    "serial": "BMB-CTF-4456",
+    "location": "Planta Santiago Centro",
+    "model": "Grundfos CR 64-2 A-F-A-E-HQQE"
+  },
+  {
+    "id": "m6",
+    "companyId": "c2",
+    "branchId": "s3",
+    "name": "Motor Asincrono 75kW",
+    "serial": "MTR-ASN-7823",
+    "location": "Planta Santiago Centro",
+    "model": "WEG W22 Plus 75kW 1780rpm"
+  },
+  {
+    "id": "m7",
+    "companyId": "c2",
+    "branchId": "s4",
+    "name": "Variador de Frecuencia",
+    "serial": "VDF-PWR-2134",
+    "location": "Planta Maipú",
+    "model": "ABB ACS880-01-430A-3"
+  },
+  {
+    "id": "m8",
+    "companyId": "c2",
+    "branchId": "s4",
+    "name": "Sistema UPS Trifásico",
+    "serial": "UPS-TRI-8901",
+    "location": "Planta Maipú",
+    "model": "Eaton 9395 225kVA"
+  },
+  {
+    "id": "m9",
+    "companyId": "c3",
+    "branchId": "s5",
+    "name": "Grupo Electrógeno",
+    "serial": "GEN-DSL-5623",
+    "location": "Planta Valparaíso",
+    "model": "Caterpillar C18 500kVA"
+  },
+  {
+    "id": "m10",
+    "companyId": "c3",
+    "branchId": "s5",
+    "name": "Banco de Condensadores",
+    "serial": "BCO-CAP-3478",
+    "location": "Planta Valparaíso",
+    "model": "ABB PFCmax 400kVAr"
+  },
+  {
+    "id": "m11",
+    "companyId": "c3",
+    "branchId": "s6",
+    "name": "Motor Sincrónico 120kW",
+    "serial": "MTR-SNC-9234",
+    "location": "Planta Viña del Mar",
+    "model": "Siemens 1LA 120kW 1500rpm"
+  },
+  {
+    "id": "m12",
+    "companyId": "c3",
+    "branchId": "s6",
+    "name": "Subestación Eléctrica",
+    "serial": "SUB-ELC-1567",
+    "location": "Planta Viña del Mar",
+    "model": "ABB UniGear ZS1 24kV"
+  },
+  {
+    "id": "m13",
+    "companyId": "c4",
+    "branchId": "s7",
+    "name": "Caldera Industrial",
+    "serial": "CLD-IND-7890",
+    "location": "Planta Concepción",
+    "model": "Cleaver-Brooks CB 700 HP"
+  },
+  {
+    "id": "m14",
+    "companyId": "c4",
+    "branchId": "s7",
+    "name": "Sistema HVAC Industrial",
+    "serial": "HVAC-IND-4521",
+    "location": "Planta Concepción",
+    "model": "Carrier AquaEdge 19DV 400TR"
+  },
+  {
+    "id": "m15",
+    "companyId": "c4",
+    "branchId": "s8",
+    "name": "Arrancador Suave",
+    "serial": "ARR-SFT-6782",
+    "location": "Planta Talcahuano",
+    "model": "Schneider Altistart 48 200A"
+  },
+  {
+    "id": "m16",
+    "companyId": "c4",
+    "branchId": "s8",
+    "name": "Puente Grúa Industrial",
+    "serial": "GRU-PNT-3345",
+    "location": "Planta Talcahuano",
+    "model": "Konecranes CXT 15Ton"
+  }
+]
