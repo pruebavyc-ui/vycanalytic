@@ -10,7 +10,7 @@ export default function ExportarReportes({ user, onLogout }:{ user:any, onLogout
         {user?.role === 'admin' && <Sidebar user={user} onLogout={onLogout} />}
 
         <main className="flex-1 p-8 md:ml-64">
-          <div className="max-w-5xl mx-auto">
+          <div className="fixed top-29 left-[280px] right-8 z-30 p-4 bg-white shadow rounded-lg md:rounded-xl border border-slate-100 h-[88.5%] ">
             <h2 className="text-2xl font-semibold mb-4">Exportar reportes</h2>
             <div className="bg-white rounded-lg shadow p-4">Opciones para exportar reportes.</div>
           </div>
