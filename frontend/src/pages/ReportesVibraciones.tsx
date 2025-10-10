@@ -2,6 +2,7 @@ import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 import sample from '../data'
 import { useState, useRef } from 'react'
+import { saveToJSON } from '../utils/saveToJSON'
 
 type User = {
   id: string
@@ -32,13 +33,15 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
   const [selectedMachinePoint, setSelectedMachinePoint] = useState<string | null>(null)
   const [showMachineModal, setShowMachineModal] = useState(false)
   const [showAddMachineForm, setShowAddMachineForm] = useState(false)
+  const [showAddBranchForm, setShowAddBranchForm] = useState(false)
   const [draggingPoint, setDraggingPoint] = useState<string | null>(null)
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
 
-  const companies = (sample as any).companies as Company[]
+  const [localCompanies, setLocalCompanies] = useState<Company[]>((sample as any).companies as Company[])
   const users = (sample as any).users as User[]
   const [localMachines, setLocalMachines] = useState<any[]>((sample as any).machines as any[])
+  const machinePositionsFromFile = (sample as any).machinePositions as any[]
 
   const openCompany = (companyId: string) => {
     setSelectedCompanyId(companyId)
@@ -47,12 +50,20 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
 
   const openBranch = (branch: any) => {
     setSelectedBranch(branch)
-    // Cargar puntos guardados de localStorage
-    const savedPoints = localStorage.getItem(`machinePoints_${branch.id}`)
-    if (savedPoints) {
-      setMachinePoints(JSON.parse(savedPoints))
+    // Primero intentar cargar desde el archivo JSON
+    const filePositions = machinePositionsFromFile.filter((pos: any) => pos.branchId === branch.id)
+    
+    // Si hay posiciones en el archivo, usarlas
+    if (filePositions.length > 0) {
+      setMachinePoints(filePositions)
     } else {
-      setMachinePoints([])
+      // Si no hay en el archivo, intentar localStorage como fallback
+      const savedPoints = localStorage.getItem(`machinePoints_${branch.id}`)
+      if (savedPoints) {
+        setMachinePoints(JSON.parse(savedPoints))
+      } else {
+        setMachinePoints([])
+      }
     }
   }
 
@@ -62,12 +73,42 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
     setMachinePoints([])
   }
 
+  const addBranch = () => {
+    setShowAddBranchForm(true)
+  }
+
+  const createNewBranch = async (branchData: any) => {
+    const newBranch = {
+      id: `s${Date.now()}`,
+      name: branchData.name,
+      address: branchData.address,
+      mapImage: "/maps/Diseño sin título.png"
+    }
+
+    const updatedCompanies = localCompanies.map(company => 
+      company.id === selectedCompanyId
+        ? { ...company, sucursales: [...(company.sucursales || []), newBranch] }
+        : company
+    )
+
+    setLocalCompanies(updatedCompanies)
+
+    // Guardar en el archivo JSON (solo desarrollo)
+    await saveToJSON('companies.json', updatedCompanies)
+
+    // Backup en localStorage
+    localStorage.setItem('companies', JSON.stringify(updatedCompanies))
+
+    // Cerrar formulario
+    setShowAddBranchForm(false)
+  }
+
   const addMachinePoint = () => {
     // Abrir formulario para crear nueva máquina
     setShowAddMachineForm(true)
   }
 
-  const createNewMachine = (machineData: any) => {
+  const createNewMachine = async (machineData: any) => {
     const newMachine = {
       id: `m${Date.now()}`,
       companyId: selectedCompanyId,
@@ -79,7 +120,10 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
     const updatedMachines = [...localMachines, newMachine]
     setLocalMachines(updatedMachines)
     
-    // Guardar en localStorage
+    // Guardar en el archivo JSON (solo desarrollo)
+    await saveToJSON('machines.json', updatedMachines)
+    
+    // Backup en localStorage
     localStorage.setItem('machines', JSON.stringify(updatedMachines))
     
     // Crear punto en el mapa para la nueva máquina
@@ -97,9 +141,18 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
     setShowAddMachineForm(false)
   }
 
-  const saveMachinePoints = (points: any[]) => {
+  const saveMachinePoints = async (points: any[]) => {
     if (selectedBranch) {
+      // Actualizar posiciones globales
+      const allPositions = machinePositionsFromFile.filter((pos: any) => pos.branchId !== selectedBranch.id)
+      const updatedPositions = [...allPositions, ...points.map(p => ({ ...p, branchId: selectedBranch.id }))]
+      
+      // Guardar en el archivo JSON (solo desarrollo)
+      await saveToJSON('machine-positions.json', updatedPositions)
+      
+      // Backup en localStorage
       localStorage.setItem(`machinePoints_${selectedBranch.id}`, JSON.stringify(points))
+      localStorage.setItem('allMachinePositions', JSON.stringify(updatedPositions))
     }
   }
 
@@ -145,7 +198,7 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
     saveMachinePoints(updatedPoints)
   }
 
-  const selectedCompany = companies.find(c => c.id === selectedCompanyId) || null
+  const selectedCompany = localCompanies.find(c => c.id === selectedCompanyId) || null
 
   // Breadcrumb component
   const Breadcrumb = () => {
@@ -187,7 +240,7 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                   <div>
                     <h2 className="text-2xl font-semibold mb-4">Empresas</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {companies.map(company => {
+                      {localCompanies.map(company => {
                         const clients = users.filter(u => u.role === 'client' && u.companyId === company.id)
                         const companyMachines = localMachines.filter(m => m.companyId === company.id)
                         const branches = Array.from(new Set(companyMachines.map(m => m.location)))
@@ -225,7 +278,19 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                 ) : !selectedBranch ? (
                   <div>
                     <Breadcrumb />
-                    <h2 className="text-2xl font-semibold mb-4">Sucursales de {selectedCompany?.name}</h2>
+                    
+                    {/* Botón para agregar sucursal */}
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-2xl font-semibold">Sucursales de {selectedCompany?.name}</h2>
+                      <button
+                        onClick={addBranch}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                      >
+                        <span className="text-lg">+</span>
+                        Agregar Sucursal
+                      </button>
+                    </div>
+                    
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {selectedCompany?.sucursales?.map((branch: any) => {
                         const branchMachines = localMachines.filter(m => m.companyId === selectedCompanyId && m.branchId === branch.id)
@@ -277,6 +342,13 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                       </button>
 
                       <div className="flex-1"></div>
+                      
+                      {import.meta.env.DEV && (
+                        <div className="px-3 py-2 bg-green-100 text-green-800 rounded-lg text-xs font-medium flex items-center gap-2">
+                          <span className="animate-pulse">●</span>
+                          Guardado automático activo
+                        </div>
+                      )}
                       
                       <div className="text-sm text-gray-600 flex items-center">
                         {machinePoints.length} máquina{machinePoints.length !== 1 ? 's' : ''} en el mapa
@@ -498,6 +570,89 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                               >
                                 Crear y Posicionar
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Formulario para agregar nueva sucursal */}
+                    {showAddBranchForm && (
+                      <div 
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        onClick={() => setShowAddBranchForm(false)}
+                      >
+                        <div 
+                          className="bg-white rounded-lg shadow-xl p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="flex justify-between items-start mb-4">
+                            <h3 className="text-xl font-bold text-gray-800">Agregar Nueva Sucursal</h3>
+                            <button
+                              onClick={() => setShowAddBranchForm(false)}
+                              className="text-gray-400 hover:text-gray-600"
+                            >
+                              ✕
+                            </button>
+                          </div>
+
+                          <form 
+                            onSubmit={(e) => {
+                              e.preventDefault()
+                              const formData = new FormData(e.currentTarget)
+                              const branchData = {
+                                name: formData.get('name'),
+                                address: formData.get('address')
+                              }
+                              createNewBranch(branchData)
+                            }}
+                            className="space-y-4"
+                          >
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Nombre de la Sucursal *
+                              </label>
+                              <input
+                                type="text"
+                                name="name"
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Ej: Sucursal Lima Centro"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Dirección *
+                              </label>
+                              <input
+                                type="text"
+                                name="address"
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Ej: Av. Principal 123, Lima"
+                              />
+                            </div>
+
+                            <div className="bg-blue-50 p-3 rounded-lg text-sm text-blue-800">
+                              <p><strong>Empresa:</strong> {selectedCompany?.name}</p>
+                              <p className="text-xs text-blue-600 mt-1">La imagen del mapa se asignará por defecto</p>
+                            </div>
+
+                            <div className="flex gap-2 pt-4">
+                              <button
+                                type="button"
+                                onClick={() => setShowAddBranchForm(false)}
+                                className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
+                              >
+                                Cancelar
+                              </button>
+                              <button
+                                type="submit"
+                                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                              >
+                                Crear Sucursal
                               </button>
                             </div>
                           </form>

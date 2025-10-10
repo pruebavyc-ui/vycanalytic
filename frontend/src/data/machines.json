@@ -142,5 +142,32 @@
     "serial": "GRU-PNT-3345",
     "location": "Planta Talcahuano",
     "model": "Konecranes CXT 15Ton"
+  },
+  {
+    "id": "m1760055298584",
+    "companyId": "c1",
+    "branchId": "s1",
+    "location": "Sucursal Lima Norte",
+    "name": "motor volvo",
+    "serial": "aserfgsera2134r",
+    "model": "sdrftghbsert324rt5"
+  },
+  {
+    "id": "m1760056795266",
+    "companyId": "c1",
+    "branchId": "s1",
+    "location": "Sucursal Lima Norte",
+    "name": "motor v8",
+    "serial": "aerthgbwsrethb",
+    "model": "ertyjner5y67hj"
+  },
+  {
+    "id": "m1760056816416",
+    "companyId": "c1",
+    "branchId": "s1",
+    "location": "Sucursal Lima Norte",
+    "name": "motor v9",
+    "serial": "awesrgertqg",
+    "model": "aedrtbghqeratb"
   }
 ]
