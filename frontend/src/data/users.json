@@ -1,10 +1,10 @@
 [
   {
     "id": "00001",
-    "name": "Jeremias",
-    "email": "mezasuarez03@gmail.com",
+    "name": "Luis Rebolledo",
+    "email": "luis@gmail.com",
     "role": "admin",
-    "password": "admin123",
+    "password": "12345",
     "companyId": null
   },
   {

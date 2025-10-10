@@ -139,387 +139,6 @@
     ]
   },
   {
-    "report_id": "RPT-2025-10-05-LIMA",
-    "company_id": "c1",
-    "branch_id": "s1",
-    "machine_id": "m1",
-    "report_name": "Inspección trimestral bomba centrífuga",
-    "report_date": "2025-10-05",
-    "location": "Sucursal Lima Norte",
-    "created_by": "Técnico VyC",
-    "approved_by": "Jefe de Mantenimiento",
-    "summary": {
-      "good": 4,
-      "observation": 1,
-      "alarm": 0,
-      "inacceptable": 0,
-      "no_measurement": 0
-    },
-    "items": [
-      {
-        "item_number": 1,
-        "equipment_name": "Bomba Centrífuga",
-        "component": "Motor eléctrico",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Vibraciones en rango normal.",
-        "observation": "Continuar monitoreo"
-      },
-      {
-        "item_number": 2,
-        "equipment_name": "Bomba Centrífuga",
-        "component": "Rodamiento lado motor",
-        "previous_condition": "Bueno",
-        "current_condition": "Observación",
-        "diagnosis": "Ligero incremento en vibraciones de alta frecuencia.",
-        "observation": "Verificar lubricación en próxima inspección"
-      }
-    ]
-  },
-  {
-    "report_id": "RPT-2025-10-05-LIMA",
-    "company_id": "c1",
-    "branch_id": "s1",
-    "machine_id": "m1",
-    "report_name": "Inspección trimestral bomba centrífuga",
-    "report_date": "2025-10-05",
-    "location": "Sucursal Lima Norte",
-    "created_by": "Técnico VyC",
-    "approved_by": "Jefe de Mantenimiento",
-    "summary": {
-      "good": 4,
-      "observation": 1,
-      "alarm": 0,
-      "inacceptable": 0,
-      "no_measurement": 0
-    },
-    "items": [
-      {
-        "item_number": 1,
-        "equipment_name": "Bomba Centrífuga",
-        "component": "Motor eléctrico",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Vibraciones en rango normal.",
-        "observation": "Continuar monitoreo"
-      },
-      {
-        "item_number": 2,
-        "equipment_name": "Bomba Centrífuga",
-        "component": "Rodamiento lado motor",
-        "previous_condition": "Bueno",
-        "current_condition": "Observación",
-        "diagnosis": "Ligero incremento en vibraciones de alta frecuencia.",
-        "observation": "Verificar lubricación en próxima inspección"
-      }
-    ]
-  },
-  {
-    "report_id": "RPT-2025-10-05-LIMA",
-    "company_id": "c1",
-    "branch_id": "s1",
-    "machine_id": "m1",
-    "report_name": "Inspección trimestral bomba centrífuga",
-    "report_date": "2025-10-05",
-    "location": "Sucursal Lima Norte",
-    "created_by": "Técnico VyC",
-    "approved_by": "Jefe de Mantenimiento",
-    "summary": {
-      "good": 4,
-      "observation": 1,
-      "alarm": 0,
-      "inacceptable": 0,
-      "no_measurement": 0
-    },
-    "items": [
-      {
-        "item_number": 1,
-        "equipment_name": "Bomba Centrífuga",
-        "component": "Motor eléctrico",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Vibraciones en rango normal.",
-        "observation": "Continuar monitoreo"
-      },
-      {
-        "item_number": 2,
-        "equipment_name": "Bomba Centrífuga",
-        "component": "Rodamiento lado motor",
-        "previous_condition": "Bueno",
-        "current_condition": "Observación",
-        "diagnosis": "Ligero incremento en vibraciones de alta frecuencia.",
-        "observation": "Verificar lubricación en próxima inspección"
-      },
-      {
-        "item_number": 3,
-        "equipment_name": "Bomba Centrífuga",
-        "component": "Motor eléctrico",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Vibraciones en rango normal.",
-        "observation": "Continuar monitoreo"
-      }
-      
-    ]
-    
-  },
-  {
-    "report_id": "RPT-2025-10-05-LIMA",
-    "company_id": "c1",
-    "branch_id": "s1",
-    "machine_id": "m1",
-    "report_name": "Inspección trimestral bomba centrífuga",
-    "report_date": "2025-10-05",
-    "location": "Sucursal Lima Norte",
-    "created_by": "Técnico VyC",
-    "approved_by": "Jefe de Mantenimiento",
-    "summary": {
-      "good": 4,
-      "observation": 1,
-      "alarm": 0,
-      "inacceptable": 0,
-      "no_measurement": 0
-    },
-    "items": [
-      {
-        "item_number": 1,
-        "equipment_name": "Bomba Centrífuga",
-        "component": "Motor eléctrico",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Vibraciones en rango normal.",
-        "observation": "Continuar monitoreo"
-      },
-      {
-        "item_number": 2,
-        "equipment_name": "Bomba Centrífuga",
-        "component": "Rodamiento lado motor",
-        "previous_condition": "Bueno",
-        "current_condition": "Observación",
-        "diagnosis": "Ligero incremento en vibraciones de alta frecuencia.",
-        "observation": "Verificar lubricación en próxima inspección"
-      },
-      {
-        "item_number": 3,
-        "equipment_name": "Bomba Centrífuga",
-        "component": "Motor eléctrico",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Vibraciones en rango normal.",
-        "observation": "Continuar monitoreo"
-      }
-      ,
-      {
-        "item_number": 3,
-        "equipment_name": "motor principal",
-        "component": "Motor eléctrico",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Vibraciones en rango normal.",
-        "observation": "Continuar monitoreo"
-      }
-      
-    ]
-    
-  }
-  ,
-  {
-    "report_id": "RPT-2025-10-10-LIMA-M1",
-    "company_id": "c1",
-    "branch_id": "s1",
-    "machine_id": "m1",
-    "report_name": "Inspección completa Motor Trifásico Principal - Octubre 2025",
-    "report_date": "2025-10-10",
-    "location": "Sucursal Lima Norte",
-    "created_by": "Técnico Responsable",
-    "approved_by": "Jefe de Mantenimiento",
-    "summary": {
-      "good": 6,
-      "observation": 2,
-      "alarm": 0,
-      "inacceptable": 0,
-      "no_measurement": 0
-    },
-    "items": [
-      {
-        "item_number": 1,
-        "equipment_name": "Motor Trifásico Principal",
-        "component": "Rodamientos",
-        "previous_condition": "Observación",
-        "current_condition": "Observación",
-        "diagnosis": "Incremento leve en vibración radial en rodamiento lado motor. No supera límites de alarma.",
-        "observation": "Programar lubricación y seguimiento mensual. Revisar alineación en próxima visita."
-      },
-      {
-        "item_number": 2,
-        "equipment_name": "Motor Trifásico Principal",
-        "component": "Eje y Acoplamiento",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Acoplamiento en buen estado, sin desbalance significativo.",
-        "observation": "Mantener control visual y torque de fijación."
-      },
-      {
-        "item_number": 3,
-        "equipment_name": "Motor Trifásico Principal",
-        "component": "Ventilación y Carcasa",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Flujo de aire correcto, sin obstrucciones.",
-        "observation": "Limpiar filtro de ventilación en próxima parada."
-      },
-      {
-        "item_number": 4,
-        "equipment_name": "Motor Trifásico Secundario",
-        "component": "Bobinado Estator",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Resistencia y aislamiento dentro de parámetros normados.",
-        "observation": "Registrar valores en historial térmico."
-      },
-      {
-        "item_number": 5,
-        "equipment_name": "Motor Trifásico Secundario",
-        "component": "Sistema de Lubricación",
-        "previous_condition": "Observación",
-        "current_condition": "Observación",
-        "diagnosis": "Nivel y calidad de grasa ligeramente por debajo de recomendación.",
-        "observation": "Reabastecer con grasa especificada y controlar contaminantes."
-      },
-      {
-        "item_number": 6,
-        "equipment_name": "Motor Trifásico Secundario",
-        "component": "Mediciones Vibración RMS",
-        "previous_condition": "Bueno",
-        "current_condition": "Observación",
-        "diagnosis": "RMS global 3.5 mm/s (ligeramente superior al histórico).",
-        "observation": "Monitorear tendencia; si sube 10% en siguiente mes, planificar intervención."
-      }
-    ]
-  },
-  {
-    "report_id": "RPT-2025-10-10-LIMA-M2",
-    "company_id": "c1",
-    "branch_id": "s1",
-    "machine_id": "m2",
-    "report_name": "Inspección completa Compresor de Aire Industrial - Octubre 2025",
-    "report_date": "2025-10-10",
-    "location": "Sucursal Lima Norte",
-    "created_by": "Técnico de Vibraciones",
-    "approved_by": "Supervisor de Mantenimiento",
-    "summary": {
-      "good": 5,
-      "observation": 2,
-      "alarm": 1,
-      "inacceptable": 0,
-      "no_measurement": 0
-    },
-    "items": [
-      {
-        "item_number": 1,
-        "equipment_name": "Compresor de Aire Industrial",
-        "component": "Motor Principal",
-        "previous_condition": "Bueno",
-        "current_condition": "Observación",
-        "diagnosis": "Aumento de vibración axial en rango de observación; posible aflojamiento parcial en bridas.",
-        "observation": "Verificar apriete de bridas y tensado de elementos. Programar intervención si persiste."
-      },
-      {
-        "item_number": 2,
-        "equipment_name": "Compresor de Aire Industrial",
-        "component": "Rodamientos de Compresor",
-        "previous_condition": "Bueno",
-        "current_condition": "Alarma",
-        "diagnosis": "Elevadas amplitudes en baja frecuencia compatibles con daño incipiente en rodamiento impulsor.",
-        "observation": "Reemplazo recomendado en ventana de mantenimiento próxima. Preparar repuesto."
-      },
-      {
-        "item_number": 3,
-        "equipment_name": "Compresor de Aire Industrial",
-        "component": "Acoplamiento",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Sin desalineación crítica detectada.",
-        "observation": "Mantener monitoreo."
-      },
-      {
-        "item_number": 4,
-        "equipment_name": "Compresor de Aire Industrial",
-        "component": "Sistema de Lubricación",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Aceite con parámetros aceptables; no hay contaminación significativa.",
-        "observation": "Siguiente cambio según programaciones."
-      },
-      {
-        "item_number": 5,
-        "equipment_name": "Compresor de Aire Industrial",
-        "component": "Filtro de Entrada",
-        "previous_condition": "Observación",
-        "current_condition": "Observación",
-        "diagnosis": "Filtro con suciedad acumulada que incrementa carga de aspiración.",
-        "observation": "Reemplazar filtro en próximo paro."
-      }
-    ]
-  },
-  {
-    "report_id": "RPT-2025-10-10-LIMA-MOTORVOLVO",
-    "company_id": "c1",
-    "branch_id": "s1",
-    "machine_id": "m1760055298584",
-    "report_name": "Inspección motor Volvo - Octubre 2025",
-    "report_date": "2025-10-10",
-    "location": "Sucursal Lima Norte",
-    "created_by": "Técnico Senior",
-    "approved_by": "Jefe de Planta",
-    "summary": {
-      "good": 4,
-      "observation": 1,
-      "alarm": 0,
-      "inacceptable": 0,
-      "no_measurement": 0
-    },
-    "items": [
-      {
-        "item_number": 1,
-        "equipment_name": "motor volvo",
-        "component": "Sistema de Enfriamiento",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Circuito de enfriamiento sin obstrucciones, temperatura estable.",
-        "observation": "Verificar empaques y mangueras en inspección programada."
-      },
-      {
-        "item_number": 2,
-        "equipment_name": "motor volvo",
-        "component": "Rodamientos",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Niveles de vibración dentro de parámetros aceptables.",
-        "observation": "Mantener régimen de lubricación y registrar tendencia."
-      },
-      {
-        "item_number": 3,
-        "equipment_name": "motor volvo",
-        "component": "Cuerpo y Soportes",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Sin grietas ni aflojamiento detectable.",
-        "observation": "Reapretar anclajes si se detectan ruidos en operación."
-      }
-      ,
-      {
-        "item_number": 4,
-        "equipment_name": "motor volvo",
-        "component": "Sistema Eléctrico (Bornes)",
-        "previous_condition": "Bueno",
-        "current_condition": "Bueno",
-        "diagnosis": "Bornes sin sobrecalentamiento ni corrosión significativa.",
-        "observation": "Aplicar protección antioxidante en bornes expuestos."
-      }
-    ]
-  },
-  {
     "report_id": "RPT-2025-10-10-LIMA-MOTORV8",
     "company_id": "c1",
     "branch_id": "s1",
@@ -554,8 +173,7 @@
         "current_condition": "Bueno",
         "diagnosis": "Sin desalineación detectada.",
         "observation": "No aplica acciones correctivas."
-      }
-      ,
+      },
       {
         "item_number": 3,
         "equipment_name": "motor v8",
@@ -611,8 +229,7 @@
         "current_condition": "Observación",
         "diagnosis": "Pequeña corrosión en borne externo detectada por inspección visual.",
         "observation": "Limpiar y proteger con compuesto anticorrosivo."
-      }
-      ,
+      },
       {
         "item_number": 3,
         "equipment_name": "motor v9",
@@ -632,5 +249,220 @@
         "observation": "Aplicar torque verificado en próxima parada."
       }
     ]
+  },
+  {
+    "report_name": "Inspección Compresor de Aire Industrial 2025-10-10",
+    "report_date": "2025-10-10",
+    "location": "Planta Lima Norte",
+    "created_by": "Luis Rebolledo",
+    "approved_by": "",
+    "company_id": "c1",
+    "branch_id": "s1",
+    "machine_id": "m2",
+    "items": [
+      {
+        "item_number": 1,
+        "equipment_name": "Motor principal",
+        "component": "Motor",
+        "previous_condition": "Inaceptable",
+        "current_condition": "Observación",
+        "diagnosis": "sin diagnostico",
+        "observation": "nada"
+      },
+      {
+        "item_number": 2,
+        "equipment_name": "Motor principal",
+        "component": "Electricidad",
+        "previous_condition": "Bueno",
+        "current_condition": "Observación",
+        "diagnosis": "sin diagnostico",
+        "observation": "nada"
+      },
+      {
+        "item_number": 3,
+        "equipment_name": "Motor principal",
+        "component": "Volante",
+        "previous_condition": "Inaceptable",
+        "current_condition": "Observación",
+        "diagnosis": "sin diagnostico",
+        "observation": "nada"
+      },
+      {
+        "item_number": 4,
+        "equipment_name": "Motor secundario",
+        "component": "Motor",
+        "previous_condition": "Alarma",
+        "current_condition": "S/Medición",
+        "diagnosis": "sin diagnostico",
+        "observation": "nada"
+      },
+      {
+        "item_number": 5,
+        "equipment_name": "Motor secundario",
+        "component": "Electricidad",
+        "previous_condition": "Bueno",
+        "current_condition": "Bueno",
+        "diagnosis": "sin diagnostico",
+        "observation": "nada"
+      },
+      {
+        "item_number": 6,
+        "equipment_name": "Motor secundario",
+        "component": "Volante",
+        "previous_condition": "Bueno",
+        "current_condition": "Bueno",
+        "diagnosis": "sin diagnostico",
+        "observation": "nada"
+      }
+    ],
+    "report_id": "RPT-2025-10-10-GOONUU",
+    "summary": {
+      "good": 2,
+      "observation": 3,
+      "alarm": 0,
+      "inacceptable": 0,
+      "no_measurement": 1
+    }
+  },
+  {
+    "report_name": "Inspección Motor",
+    "report_date": "2025-10-10",
+    "location": "Planta Lima Norte",
+    "created_by": "Luis Rebolledo",
+    "approved_by": "",
+    "company_id": "c1",
+    "branch_id": "s1",
+    "machine_id": "m1",
+    "items": [
+      {
+        "item_number": 1,
+        "equipment_name": "Motor 1",
+        "component": "motor",
+        "previous_condition": "Inaceptable",
+        "current_condition": "Inaceptable",
+        "diagnosis": "Sin diagnostico",
+        "observation": "Nada"
+      },
+      {
+        "item_number": 2,
+        "equipment_name": "Motor 1",
+        "component": "ventiladores",
+        "previous_condition": "Inaceptable",
+        "current_condition": "Inaceptable",
+        "diagnosis": "Sin diagnostico",
+        "observation": "Nada"
+      },
+      {
+        "item_number": 3,
+        "equipment_name": "Motor 1",
+        "component": "corriente",
+        "previous_condition": "Inaceptable",
+        "current_condition": "Inaceptable",
+        "diagnosis": "Sin diagnostico",
+        "observation": "Nada"
+      }
+    ],
+    "report_id": "RPT-2025-10-10-E03X90",
+    "summary": {
+      "good": 0,
+      "observation": 0,
+      "alarm": 0,
+      "inacceptable": 3,
+      "no_measurement": 0
+    }
+  },
+  {
+    "report_name": "Inspección Tablero Eléctrico General 2025-10-10",
+    "report_date": "2025-10-10",
+    "location": "Planta Lima Sur",
+    "created_by": "Luis Rebolledo",
+    "approved_by": "",
+    "company_id": "c1",
+    "branch_id": "s2",
+    "machine_id": "m4",
+    "items": [
+      {
+        "item_number": 1,
+        "equipment_name": "Motor electrico",
+        "component": "motor",
+        "previous_condition": "Inaceptable",
+        "current_condition": "Inaceptable",
+        "diagnosis": "falta de mantenimiento",
+        "observation": "falta mantencion"
+      },
+      {
+        "item_number": 2,
+        "equipment_name": "Motor electrico",
+        "component": "cableado",
+        "previous_condition": "Inaceptable",
+        "current_condition": "Inaceptable",
+        "diagnosis": "cables gastados",
+        "observation": "cambiar cableado completo"
+      },
+      {
+        "item_number": 3,
+        "equipment_name": "Motor electrico",
+        "component": "ventilacion",
+        "previous_condition": "Inaceptable",
+        "current_condition": "Inaceptable",
+        "diagnosis": "aspas rotas",
+        "observation": "mejorar aspas de ventiladores"
+      }
+    ],
+    "report_id": "RPT-2025-10-10-C31SQE",
+    "summary": {
+      "good": 0,
+      "observation": 0,
+      "alarm": 0,
+      "inacceptable": 3,
+      "no_measurement": 0
+    }
+  },
+  {
+    "report_name": "Inspección Transformador de Potencia 2025-10-10",
+    "report_date": "2025-10-10",
+    "location": "Planta Lima Sur",
+    "created_by": "Luis Rebolledo",
+    "approved_by": "",
+    "company_id": "c1",
+    "branch_id": "s2",
+    "machine_id": "m3",
+    "items": [
+      {
+        "item_number": 1,
+        "equipment_name": "motor principal",
+        "component": "motor",
+        "previous_condition": "Bueno",
+        "current_condition": "Bueno",
+        "diagnosis": "excelente",
+        "observation": "todo perfecto"
+      },
+      {
+        "item_number": 2,
+        "equipment_name": "motor principal",
+        "component": "ventiladores",
+        "previous_condition": "Bueno",
+        "current_condition": "Bueno",
+        "diagnosis": "excelente",
+        "observation": "todo perfecto"
+      },
+      {
+        "item_number": 3,
+        "equipment_name": "motor principal",
+        "component": "Volante",
+        "previous_condition": "Bueno",
+        "current_condition": "Bueno",
+        "diagnosis": "excelente",
+        "observation": "todo perfecto"
+      }
+    ],
+    "report_id": "RPT-2025-10-10-8QAKHG",
+    "summary": {
+      "good": 3,
+      "observation": 0,
+      "alarm": 0,
+      "inacceptable": 0,
+      "no_measurement": 0
+    }
   }
 ]

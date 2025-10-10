@@ -36,6 +36,7 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
   const [showMachineModal, setShowMachineModal] = useState(false)
   const [showAddMachineForm, setShowAddMachineForm] = useState(false)
   const [showAddBranchForm, setShowAddBranchForm] = useState(false)
+  const [showAddCompanyForm, setShowAddCompanyForm] = useState(false)
   const [selectedReport, setSelectedReport] = useState<any | null>(null)
   const [showReportDetailModal, setShowReportDetailModal] = useState(false)
   const [draggingPoint, setDraggingPoint] = useState<string | null>(null)
@@ -46,7 +47,12 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
   const users = (sample as any).users as User[]
   const [localMachines, setLocalMachines] = useState<any[]>((sample as any).machines as any[])
   const machinePositionsFromFile = (sample as any).machinePositions as any[]
-  const vibrationReports = (sample as any).vibrationReports as any[]
+  const [localVibrationReports, setLocalVibrationReports] = useState<any[]>((sample as any).vibrationReports as any[])
+  const vibrationReports = localVibrationReports
+
+  const [showAddReportModal, setShowAddReportModal] = useState(false)
+  const [newReportDraft, setNewReportDraft] = useState<any>(null)
+  const [editingReportId, setEditingReportId] = useState<string | null>(null)
 
   const openCompany = (companyId: string) => {
     setSelectedCompanyId(companyId)
@@ -88,6 +94,32 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
 
   const addBranch = () => {
     setShowAddBranchForm(true)
+  }
+
+  const addCompany = () => {
+    setShowAddCompanyForm(true)
+  }
+
+  const createNewCompany = async (companyData: any) => {
+    const newCompany: Company = {
+      id: `c${Date.now()}`,
+      name: companyData.name,
+      ruc_or_identifier: companyData.ruc_or_identifier || '',
+      address: companyData.address || '',
+      sucursales: []
+    }
+
+    const updatedCompanies = [...localCompanies, newCompany]
+    setLocalCompanies(updatedCompanies)
+
+    // Guardar en el archivo JSON (solo desarrollo)
+    await saveToJSON('companies.json', updatedCompanies)
+
+    // Backup en localStorage
+    localStorage.setItem('companies', JSON.stringify(updatedCompanies))
+
+    // Cerrar formulario
+    setShowAddCompanyForm(false)
   }
 
   const createNewBranch = async (branchData: any) => {
@@ -416,7 +448,18 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
             <div className="p-6 h-full overflow-auto">
                 {!selectedCompany ? (
                   <div>
-                    <h2 className="text-2xl font-semibold mb-4">Empresas</h2>
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-2xl font-semibold">Empresas</h2>
+                      {user?.role === 'admin' && (
+                        <button
+                          onClick={addCompany}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                        >
+                          <span className="text-lg">+</span>
+                          Agregar Empresa
+                        </button>
+                      )}
+                    </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {localCompanies.map(company => {
                         const clients = users.filter(u => u.role === 'client' && u.companyId === company.id)
@@ -452,6 +495,96 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                         )
                       })}
                     </div>
+
+                    {/* Modal para Agregar Empresa */}
+                    {showAddCompanyForm && (
+                      <div 
+                        className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50"
+                        onClick={() => setShowAddCompanyForm(false)}
+                      >
+                        <div 
+                          className="bg-white rounded-lg shadow-xl p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="flex justify-between items-start mb-4">
+                            <h3 className="text-xl font-bold text-gray-800">Agregar Nueva Empresa</h3>
+                            <button
+                              onClick={() => setShowAddCompanyForm(false)}
+                              className="text-gray-400 hover:text-gray-600"
+                            >
+                              ✕
+                            </button>
+                          </div>
+
+                          <form 
+                            onSubmit={(e) => {
+                              e.preventDefault()
+                              const formData = new FormData(e.currentTarget)
+                              const companyData = {
+                                name: formData.get('name'),
+                                ruc_or_identifier: formData.get('ruc_or_identifier'),
+                                address: formData.get('address')
+                              }
+                              createNewCompany(companyData)
+                            }}
+                            className="space-y-4"
+                          >
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Nombre de la Empresa *
+                              </label>
+                              <input
+                                type="text"
+                                name="name"
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Ej: Tutelkan S.A.C."
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                RUC / Identificador
+                              </label>
+                              <input
+                                type="text"
+                                name="ruc_or_identifier"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Ej: 2060xxxxxxxx"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Dirección
+                              </label>
+                              <input
+                                type="text"
+                                name="address"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Ej: Av. Principal 123, Lima"
+                              />
+                            </div>
+
+                            <div className="flex gap-2 pt-4">
+                              <button
+                                type="button"
+                                onClick={() => setShowAddCompanyForm(false)}
+                                className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
+                              >
+                                Cancelar
+                              </button>
+                              <button
+                                type="submit"
+                                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                              >
+                                Crear Empresa
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : !selectedBranch ? (
                   <div>
@@ -497,6 +630,89 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                         )
                       })}
                     </div>
+
+                    {/* Modal para agregar nueva sucursal (rendered in this view) */}
+                    {showAddBranchForm && (
+                      <div 
+                        className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50"
+                        onClick={() => setShowAddBranchForm(false)}
+                      >
+                        <div 
+                          className="bg-white rounded-lg shadow-xl p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="flex justify-between items-start mb-4">
+                            <h3 className="text-xl font-bold text-gray-800">Agregar Nueva Sucursal</h3>
+                            <button
+                              onClick={() => setShowAddBranchForm(false)}
+                              className="text-gray-400 hover:text-gray-600"
+                            >
+                              ✕
+                            </button>
+                          </div>
+
+                          <form 
+                            onSubmit={(e) => {
+                              e.preventDefault()
+                              const formData = new FormData(e.currentTarget)
+                              const branchData = {
+                                name: formData.get('name'),
+                                address: formData.get('address')
+                              }
+                              createNewBranch(branchData)
+                            }}
+                            className="space-y-4"
+                          >
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Nombre de la Sucursal *
+                              </label>
+                              <input
+                                type="text"
+                                name="name"
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Ej: Sucursal Lima Centro"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Dirección *
+                              </label>
+                              <input
+                                type="text"
+                                name="address"
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Ej: Av. Principal 123, Lima"
+                              />
+                            </div>
+
+                            <div className="bg-blue-50 p-3 rounded-lg text-sm text-blue-800">
+                              <p><strong>Empresa:</strong> {selectedCompany?.name}</p>
+                              <p className="text-xs text-blue-600 mt-1">La imagen del mapa se asignará por defecto</p>
+                            </div>
+
+                            <div className="flex gap-2 pt-4">
+                              <button
+                                type="button"
+                                onClick={() => setShowAddBranchForm(false)}
+                                className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
+                              >
+                                Cancelar
+                              </button>
+                              <button
+                                type="submit"
+                                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                              >
+                                Crear Sucursal
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div>
@@ -736,6 +952,56 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                                               >
                                                 📄 Exportar PDF
                                               </button>
+                                              {user?.role === 'admin' && (
+                                                <>
+                                                  <button
+                                                    onClick={() => {
+                                                      // open edit modal with current report
+                                                      setNewReportDraft({ ...latestReport })
+                                                      setEditingReportId(latestReport.report_id)
+                                                      setShowAddReportModal(true)
+                                                    }}
+                                                    className="px-2 py-1 bg-amber-600 text-white rounded-md hover:bg-amber-700 text-sm"
+                                                  >
+                                                    ✏️ Editar
+                                                  </button>
+                                                  <button
+                                                    onClick={async () => {
+                                                      if (!confirm('¿Eliminar este reporte? Esta acción no se puede deshacer.')) return
+                                                      const updated = vibrationReports.filter((r:any) => r.report_id !== latestReport.report_id)
+                                                      setLocalVibrationReports(updated)
+                                                      await saveToJSON('vibration-reports.json', updated)
+                                                    }}
+                                                    className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
+                                                  >
+                                                    🗑️ Eliminar
+                                                  </button>
+                                                </>
+                                              )}
+                                              {user?.role === 'admin' && (
+                                                <button
+                                                  onClick={() => {
+                                                    // initialize draft
+                                                    const today = new Date().toISOString().slice(0,10)
+                                                    setNewReportDraft({
+                                                      report_name: `Inspección ${machine.name} ${today}`,
+                                                      report_date: today,
+                                                      location: machine.location || selectedBranch?.name || '',
+                                                      created_by: user?.name || '',
+                                                      approved_by: '',
+                                                      company_id: machine.companyId,
+                                                      branch_id: machine.branchId,
+                                                      machine_id: machine.id,
+                                                      items: []
+                                                    })
+                                                    setEditingReportId(null)
+                                                    setShowAddReportModal(true)
+                                                  }}
+                                                  className="px-2 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
+                                                >
+                                                  ➕ Agregar Reporte
+                                                </button>
+                                              )}
                                             </div>
                                           </div>
                                       <div className="text-2xl font-bold mb-2">
@@ -770,6 +1036,31 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                                         <div className="text-4xl mb-2">📋</div>
                                         <div className="font-semibold">Sin reportes registrados</div>
                                         <div className="text-sm mt-1">Esta máquina aún no tiene inspecciones</div>
+                                        {user?.role === 'admin' && (
+                                          <div className="mt-4">
+                                            <button
+                                              onClick={() => {
+                                                const today = new Date().toISOString().slice(0,10)
+                                                setNewReportDraft({
+                                                  report_name: `Inspección ${machine.name} ${today}`,
+                                                  report_date: today,
+                                                  location: machine.location || selectedBranch?.name || '',
+                                                  created_by: user?.name || '',
+                                                  approved_by: '',
+                                                  company_id: machine.companyId,
+                                                  branch_id: machine.branchId,
+                                                  machine_id: machine.id,
+                                                  items: []
+                                                })
+                                                setEditingReportId(null)
+                                                setShowAddReportModal(true)
+                                              }}
+                                              className="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                                            >
+                                              ➕ Agregar Reporte
+                                            </button>
+                                          </div>
+                                        )}
                                       </div>
                                     </div>
                                   )}
@@ -816,6 +1107,28 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                                                 >
                                                   📄
                                                 </button>
+                                                {user?.role === 'admin' && (
+                                                  <>
+                                                    <button
+                                                      onClick={(e) => { e.stopPropagation(); setNewReportDraft({ ...report }); setEditingReportId(report.report_id); setShowAddReportModal(true) }}
+                                                      className="px-2 py-1 bg-amber-600 text-white rounded-md hover:bg-amber-700 text-sm"
+                                                    >
+                                                      ✏️
+                                                    </button>
+                                                    <button
+                                                      onClick={async (e) => {
+                                                        e.stopPropagation();
+                                                        if (!confirm('¿Eliminar este reporte?')) return
+                                                        const updated = vibrationReports.filter((r:any) => r.report_id !== report.report_id)
+                                                        setLocalVibrationReports(updated)
+                                                        await saveToJSON('vibration-reports.json', updated)
+                                                      }}
+                                                      className="px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
+                                                    >
+                                                      🗑️
+                                                    </button>
+                                                  </>
+                                                )}
                                               </div>
                                             </div>
                                           </div>
@@ -944,6 +1257,153 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                               >
                                 Crear y Posicionar
                               </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Modal para Agregar Reporte (admin) */}
+                    {showAddReportModal && newReportDraft && (
+                      <div className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-60" onClick={() => setShowAddReportModal(false)}>
+                        <div className="bg-white rounded-lg shadow-xl p-6 max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-xl font-bold">{editingReportId ? 'Editar Reporte' : 'Agregar Reporte'} - {newReportDraft.report_name}</h3>
+                            <button onClick={() => { setShowAddReportModal(false); setEditingReportId(null) }} className="text-gray-400 hover:text-gray-600">✕</button>
+                          </div>
+
+                          <form onSubmit={async (e) => {
+                            e.preventDefault()
+                            // Build report object and append
+                            const draft = { ...newReportDraft }
+                            // Preserve id when editing, otherwise generate
+                            if (editingReportId) {
+                              draft.report_id = editingReportId
+                            } else if (!draft.report_id) {
+                              draft.report_id = `RPT-${new Date().toISOString().slice(0,10)}-${Math.random().toString(36).slice(2,8).toUpperCase()}`
+                            }
+                            // compute summary counts
+                            const summary = { good:0, observation:0, alarm:0, inacceptable:0, no_measurement:0 };
+                            (draft.items || []).forEach((it:any) => {
+                              const c = (it.current_condition || '').toString().toLowerCase()
+                              if (c.includes('inacept')) summary.inacceptable++
+                              else if (c.includes('alarma')) summary.alarm++
+                              else if (c.includes('observ')) summary.observation++
+                              else if (c.includes('medic') || c.includes('s/med')) summary.no_measurement++
+                              else summary.good++
+                            })
+                            draft.summary = summary
+
+                            // save to file (dev helper)
+                            let updated: any[] = []
+                            if (editingReportId) {
+                              updated = localVibrationReports.map((r:any) => r.report_id === editingReportId ? draft : r)
+                            } else {
+                              updated = [...localVibrationReports, draft]
+                            }
+                            setLocalVibrationReports(updated)
+                            await saveToJSON('vibration-reports.json', updated)
+                            setShowAddReportModal(false)
+                            setEditingReportId(null)
+                          }} className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">Nombre del Reporte</label>
+                                <input name="report_name" value={newReportDraft.report_name} onChange={(e) => setNewReportDraft({...newReportDraft, report_name: e.target.value})} className="w-full px-3 py-2 border rounded" />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">Fecha</label>
+                                <input type="date" name="report_date" value={newReportDraft.report_date} onChange={(e) => setNewReportDraft({...newReportDraft, report_date: e.target.value})} className="w-full px-3 py-2 border rounded" />
+                              </div>
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700">Inspector (Creado por)</label>
+                              <input name="created_by" value={newReportDraft.created_by} onChange={(e) => setNewReportDraft({...newReportDraft, created_by: e.target.value})} className="w-full px-3 py-2 border rounded" />
+                            </div>
+
+                            <div>
+                              <h4 className="font-semibold">Items de Inspección</h4>
+                              <div className="flex flex-wrap gap-2 text-xs text-gray-700 mb-2">
+                                <span className="px-2 py-1 rounded border bg-green-100 border-green-300 text-green-800">Bueno</span>
+                                <span className="px-2 py-1 rounded border bg-yellow-100 border-yellow-300 text-yellow-800">Observación</span>
+                                <span className="px-2 py-1 rounded border bg-orange-100 border-orange-300 text-orange-800">Alarma</span>
+                                <span className="px-2 py-1 rounded border bg-red-100 border-red-300 text-red-800">Inaceptable</span>
+                                <span className="px-2 py-1 rounded border bg-gray-100 border-gray-300 text-gray-800">S/Medición</span>
+                              </div>
+                              <div className="space-y-2">
+                                {(newReportDraft.items || []).map((it:any, idx:number) => (
+                                  <div key={idx} className="space-y-3 rounded-lg border border-gray-200 p-3 bg-gray-50">
+                                    <div className="grid grid-cols-6 gap-2 items-end">
+                                      <div>
+                                        <label className="block text-xs">#</label>
+                                        <input type="number" value={it.item_number} onChange={(e)=>{
+                                          const items = [...newReportDraft.items]; items[idx].item_number = Number(e.target.value); setNewReportDraft({...newReportDraft, items})
+                                        }} className="w-full px-2 py-1 border rounded" />
+                                      </div>
+                                      <div className="col-span-2">
+                                        <label className="block text-xs">Equipo</label>
+                                        <input value={it.equipment_name} onChange={(e)=>{const items=[...newReportDraft.items];items[idx].equipment_name=e.target.value;setNewReportDraft({...newReportDraft,items})}} className="w-full px-2 py-1 border rounded" />
+                                      </div>
+                                      <div>
+                                        <label className="block text-xs">Componente</label>
+                                        <input value={it.component} onChange={(e)=>{const items=[...newReportDraft.items];items[idx].component=e.target.value;setNewReportDraft({...newReportDraft,items})}} className="w-full px-2 py-1 border rounded" />
+                                      </div>
+                                      <div>
+                                        <label className="block text-xs">Cond. Anterior</label>
+                                        <select value={it.previous_condition || 'S/Medición'} onChange={(e)=>{const items=[...newReportDraft.items];items[idx].previous_condition=e.target.value;setNewReportDraft({...newReportDraft,items})}} className="w-full px-2 py-1 border rounded bg-white">
+                                          <option>Bueno</option>
+                                          <option>Observación</option>
+                                          <option>Alarma</option>
+                                          <option>Inaceptable</option>
+                                          <option>S/Medición</option>
+                                        </select>
+                                      </div>
+                                      <div>
+                                        <label className="block text-xs">Cond. Actual</label>
+                                        <select value={it.current_condition || 'S/Medición'} onChange={(e)=>{const items=[...newReportDraft.items];items[idx].current_condition=e.target.value;setNewReportDraft({...newReportDraft,items})}} className="w-full px-2 py-1 border rounded bg-white">
+                                          <option>Bueno</option>
+                                          <option>Observación</option>
+                                          <option>Alarma</option>
+                                          <option>Inaceptable</option>
+                                          <option>S/Medición</option>
+                                        </select>
+                                      </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-6 gap-2 items-start">
+                                      <div>
+                                        <button type="button" onClick={()=>{
+                                          const items=[...newReportDraft.items]; items.splice(idx,1); setNewReportDraft({...newReportDraft, items})
+                                        }} className="px-3 py-2 bg-red-500 text-white rounded">Eliminar</button>
+                                      </div>
+
+                                      <div className="col-span-2">
+                                        <label className="block text-xs">Diagnóstico</label>
+                                        <input placeholder="Ej: Desbalance leve" value={it.diagnosis} onChange={(e)=>{const items=[...newReportDraft.items];items[idx].diagnosis=e.target.value;setNewReportDraft({...newReportDraft,items})}} className="w-full px-2 py-1 border rounded bg-white" />
+                                      </div>
+
+                                      <div className="col-span-3">
+                                        <label className="block text-xs">Observaciones y recomendaciones</label>
+                                        <textarea rows={2} placeholder="Ej: Verificar alineación en próximo mantenimiento" value={it.observation} onChange={(e)=>{const items=[...newReportDraft.items];items[idx].observation=e.target.value;setNewReportDraft({...newReportDraft,items})}} className="w-full px-2 py-1 border rounded bg-white" />
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+
+                                <div>
+                                  <button type="button" onClick={()=>{
+                                    const items = [...(newReportDraft.items || [])]
+                                    items.push({ item_number: items.length+1, equipment_name:'', component:'', previous_condition:'S/Medición', current_condition:'S/Medición', diagnosis:'', observation:'' })
+                                    setNewReportDraft({...newReportDraft, items})
+                                  }} className="px-3 py-2 bg-blue-600 text-white rounded">+ Agregar Item</button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex justify-end gap-2">
+                              <button type="button" onClick={()=>setShowAddReportModal(false)} className="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
+                              <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">Guardar Reporte</button>
                             </div>
                           </form>
                         </div>

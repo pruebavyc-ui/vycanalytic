@@ -9,6 +9,7 @@ import IngresarReportes from './pages/IngresarReportes'
 import ExportarReportes from './pages/ExportarReportes'
 import IngresarUsuarios from './pages/IngresarUsuarios'
 import MiEmpresa from './pages/MiEmpresa'
+import { useEffect, useRef } from 'react'
 
 function ProtectedRoute({ user, children }:{ user:any, children: any }) {
   if (!user) {
@@ -37,6 +38,33 @@ function App() {
     setUser(null)
     try { localStorage.removeItem('user') } catch (e) { /* ignore */ }
   }
+
+  // Auto-logout after inactivity (20 minutes)
+  const inactivityTimeoutRef = useRef<number | null>(null)
+  const INACTIVITY_MS = 20 * 60 * 1000 // 20 minutes
+
+  useEffect(() => {
+    const resetTimer = () => {
+      try {
+        if (inactivityTimeoutRef.current) window.clearTimeout(inactivityTimeoutRef.current)
+      } catch (e) {}
+      inactivityTimeoutRef.current = window.setTimeout(() => {
+        // perform logout
+        handleLogout()
+      }, INACTIVITY_MS)
+    }
+
+    const activityEvents = ['mousemove', 'keydown', 'mousedown', 'touchstart', 'click']
+    activityEvents.forEach(evt => window.addEventListener(evt, resetTimer))
+
+    // start timer when component mounts and when user logs in
+    if (user) resetTimer()
+
+    return () => {
+      activityEvents.forEach(evt => window.removeEventListener(evt, resetTimer))
+      try { if (inactivityTimeoutRef.current) window.clearTimeout(inactivityTimeoutRef.current) } catch (e) {}
+    }
+  }, [user])
 
   return (
     <HashRouter>
