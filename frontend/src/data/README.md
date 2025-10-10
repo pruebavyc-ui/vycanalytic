@@ -59,7 +59,7 @@ Contiene todas las máquinas industriales por sucursal.
 ```
 
 ### `reports.json`
-Contiene todos los reportes técnicos (termográficos, vibraciones, etc.).
+Contiene todos los reportes técnicos (termográficos).
 
 **Estructura:**
 ```json
@@ -83,6 +83,56 @@ Contiene todos los reportes técnicos (termográficos, vibraciones, etc.).
 }
 ```
 
+### `vibration-reports.json`
+Contiene todos los reportes de vibraciones con estado actual de cada máquina.
+
+**Estructura:**
+```json
+{
+  "report_id": "string",
+  "company_id": "string",
+  "branch_id": "string",
+  "machine_id": "string",
+  "report_name": "string",
+  "report_date": "string (YYYY-MM-DD)",
+  "location": "string",
+  "created_by": "string",
+  "approved_by": "string",
+  "summary": {
+    "good": "number",
+    "observation": "number",
+    "alarm": "number",
+    "inacceptable": "number",
+    "no_measurement": "number"
+  },
+  "items": [
+    {
+      "item_number": "number",
+      "equipment_name": "string",
+      "component": "string",
+      "previous_condition": "string",
+      "current_condition": "string",
+      "diagnosis": "string",
+      "observation": "string"
+    }
+  ]
+}
+```
+
+### `machine-positions.json`
+Contiene las posiciones de las máquinas en los mapas de cada sucursal.
+
+**Estructura:**
+```json
+{
+  "id": "string",
+  "x": "number (0-100)",
+  "y": "number (0-100)",
+  "machineId": "string",
+  "branchId": "string"
+}
+```
+
 ### `index.ts`
 Archivo principal que combina todos los JSONs y exporta los datos consolidados.
 Este archivo es el que se importa en los componentes de React.
@@ -96,6 +146,8 @@ const users = sample.users
 const companies = sample.companies
 const machines = sample.machines
 const reports = sample.reports
+const vibrationReports = sample.vibrationReports
+const machinePositions = sample.machinePositions
 ```
 
 ## Mantenimiento
@@ -105,7 +157,9 @@ Para agregar o modificar datos:
 1. **Usuarios**: Editar `users.json`
 2. **Empresas/Sucursales**: Editar `companies.json`
 3. **Máquinas**: Editar `machines.json`
-4. **Reportes**: Editar `reports.json`
+4. **Reportes Termográficos**: Editar `reports.json`
+5. **Reportes de Vibraciones**: Editar `vibration-reports.json`
+6. **Posiciones de Máquinas**: Editar `machine-positions.json` (o usar la interfaz en desarrollo)
 
 Los cambios se reflejarán automáticamente en la aplicación gracias al archivo `index.ts`.
 

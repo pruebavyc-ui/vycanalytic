@@ -8,6 +8,7 @@ import ReportesVibraciones from './pages/ReportesVibraciones'
 import IngresarReportes from './pages/IngresarReportes'
 import ExportarReportes from './pages/ExportarReportes'
 import IngresarUsuarios from './pages/IngresarUsuarios'
+import MiEmpresa from './pages/MiEmpresa'
 
 function ProtectedRoute({ user, children }:{ user:any, children: any }) {
   if (!user) {
@@ -46,6 +47,7 @@ function App() {
         <Route path="/dashboard" element={<ProtectedRoute user={user}><Dashboard user={user} onLogout={handleLogout} /></ProtectedRoute>} />
         <Route path="/clientes" element={<ProtectedRoute user={user}><Clientes user={user} onLogout={handleLogout} /></ProtectedRoute>} />
         <Route path="/reportes-vibraciones" element={<ProtectedRoute user={user}><ReportesVibraciones user={user} onLogout={handleLogout} /></ProtectedRoute>} />
+  <Route path="/mi-empresa" element={<ProtectedRoute user={user}><MiEmpresa user={user} onLogout={handleLogout} /></ProtectedRoute>} />
         <Route path="/ingresar-reportes" element={<ProtectedRoute user={user}><IngresarReportes user={user} onLogout={handleLogout} /></ProtectedRoute>} />
         <Route path="/exportar-reportes" element={<ProtectedRoute user={user}><ExportarReportes user={user} onLogout={handleLogout} /></ProtectedRoute>} />
         <Route path="/ingresar-usuarios" element={<ProtectedRoute user={user}><IngresarUsuarios user={user} onLogout={handleLogout} /></ProtectedRoute>} />

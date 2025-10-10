@@ -1,7 +1,7 @@
 import logo from '../assets/logo.png'
 import { NavLink, useNavigate } from 'react-router-dom'
 
-export default function Sidebar({ user, onLogout }:{ user:any, onLogout?: ()=>void }) {
+export default function ClientSidebar({ user, onLogout }:{ user:any, onLogout?: ()=>void }) {
   const navigate = useNavigate()
   const linkClass = ({ isActive }:{ isActive: boolean }) =>
     `flex items-center gap-2 px-3 py-2 rounded-md transition duration-150 ease-in-out ${isActive ? 'bg-sky-100 text-sky-700' : 'text-gray-700 hover:bg-sky-50 hover:translate-x-1 transform'}`
@@ -15,34 +15,15 @@ export default function Sidebar({ user, onLogout }:{ user:any, onLogout?: ()=>vo
         </div>
 
         <nav className="space-y-3 mt-6 md:mt-8">
-          <NavLink to="/dashboard" className={linkClass}>
-            🏠 Dashboard
-          </NavLink>
-
-          <NavLink to="/clientes" className={linkClass}>
-            🌡️ Reportes Termográficos
-          </NavLink>
+          {/* Client sees only vibraciones and Mi Empresa */}
 
           <NavLink to="/reportes-vibraciones" className={linkClass}>
             📊 Reportes de Vibraciones
           </NavLink>
 
-          {/* Extra management links only for admins */}
-          {user?.role !== 'client' && (
-            <>
-              <NavLink to="/ingresar-reportes" className={linkClass}>
-                ✍️ Ingresar reportes
-              </NavLink>
-
-              <NavLink to="/exportar-reportes" className={linkClass}>
-                ⬇️ Exportar reportes
-              </NavLink>
-
-              <NavLink to="/ingresar-usuarios" className={linkClass}>
-                👥 Ingresar usuarios
-              </NavLink>
-            </>
-          )}
+          <NavLink to="/mi-empresa" className={linkClass}>
+            🏢 Mi Empresa
+          </NavLink>
         </nav>
       </div>
 

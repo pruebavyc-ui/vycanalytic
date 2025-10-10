@@ -19,8 +19,13 @@ export default function Login({ onLogin }:{ onLogin: (user: User)=>void }) {
     try {
       const raw = localStorage.getItem('user')
       if (raw) {
-        // if already logged in, redirect to dashboard
-        navigate('/dashboard', { replace: true })
+        // if already logged in, redirect according to role
+        const stored = JSON.parse(raw)
+        if (stored?.role === 'client') {
+          navigate('/reportes-vibraciones', { replace: true })
+        } else {
+          navigate('/dashboard', { replace: true })
+        }
       }
     } catch (e) { /* ignore */ }
   }, [])
@@ -35,7 +40,12 @@ export default function Login({ onLogin }:{ onLogin: (user: User)=>void }) {
     const found = users.find(u => u.email === email && u.password === password)
     if (found) {
       onLogin(found)
-      navigate('/dashboard', { replace: true })
+      // redirect based on role
+      if (found.role === 'client') {
+        navigate('/reportes-vibraciones', { replace: true })
+      } else {
+        navigate('/dashboard', { replace: true })
+      }
     } else {
       setError('Correo o contraseña incorrectos')
     }

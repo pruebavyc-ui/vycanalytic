@@ -1,6 +1,8 @@
 import Sidebar from '../components/Sidebar'
+import ClientSidebar from '../components/ClientSidebar'
 import Navbar from '../components/Navbar'
 import sample from '../data'
+import logoImage from '../assets/logo.png'
 import { useState, useRef } from 'react'
 import { saveToJSON } from '../utils/saveToJSON'
 
@@ -34,6 +36,8 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
   const [showMachineModal, setShowMachineModal] = useState(false)
   const [showAddMachineForm, setShowAddMachineForm] = useState(false)
   const [showAddBranchForm, setShowAddBranchForm] = useState(false)
+  const [selectedReport, setSelectedReport] = useState<any | null>(null)
+  const [showReportDetailModal, setShowReportDetailModal] = useState(false)
   const [draggingPoint, setDraggingPoint] = useState<string | null>(null)
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
@@ -42,10 +46,19 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
   const users = (sample as any).users as User[]
   const [localMachines, setLocalMachines] = useState<any[]>((sample as any).machines as any[])
   const machinePositionsFromFile = (sample as any).machinePositions as any[]
+  const vibrationReports = (sample as any).vibrationReports as any[]
 
   const openCompany = (companyId: string) => {
     setSelectedCompanyId(companyId)
     setSelectedBranch(null)
+  }
+
+  // If user is client, auto-open their company on mount
+  if (user?.role === 'client' && !selectedCompanyId) {
+    const clientCompanyId = user.companyId
+    if (clientCompanyId) {
+      setSelectedCompanyId(clientCompanyId)
+    }
   }
 
   const openBranch = (branch: any) => {
@@ -157,8 +170,15 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
   }
 
   const handlePointMouseDown = (pointId: string, e: React.MouseEvent) => {
+    // If user is not admin, always open modal (read-only)
+    if (user?.role !== 'admin') {
+      setSelectedMachinePoint(pointId)
+      setShowMachineModal(true)
+      return
+    }
+
     if (!isEditMode) {
-      // Si no está en modo edición, mostrar modal
+      // If not in edit mode, show modal
       setSelectedMachinePoint(pointId)
       setShowMachineModal(true)
       return
@@ -189,6 +209,157 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
     if (draggingPoint) {
       saveMachinePoints(machinePoints)
       setDraggingPoint(null)
+    }
+  }
+
+  // Export a report to a downloadable PDF using html2pdf.js (loaded from CDN at runtime).
+  const exportReportAsPDF = async (report: any) => {
+    if (!report) return
+
+    // Resolve canonical report from vibrationReports (JSON) in case caller passed a lightweight object
+    let canonicalReport = report
+    const possibleIds = [report.report_id, report.reportId, report.id, report.report_id?.toString(), report.reportNumber]
+    const lookupId = possibleIds.find(Boolean)
+    if (lookupId && Array.isArray(vibrationReports)) {
+      const found = vibrationReports.find((r: any) => (
+        r.report_id === lookupId || r.report_id === report.report_id || r.report_id === report.reportId || r.reportNumber === lookupId || r.id === lookupId
+      ))
+      if (found) canonicalReport = found
+    }
+
+    const companyName = localCompanies.find(c => c.id === canonicalReport.company_id)?.name || ''
+
+    // Build grouped rows HTML
+    let rowsHtml = ''
+  const items = canonicalReport.items || []
+    const grouped: Record<string, any[]> = {}
+    
+    // Helper to map condition text to inline styles (background + color) — match report colors
+    const conditionCellStyle = (cond: any) => {
+      const s = (cond || '').toString().toLowerCase()
+      let bg = '#ffffff'
+      let color = '#111111'
+      if (s.includes('inacept')) { bg = '#fecaca'; color = '#7f1d1d' } // light red
+      else if (s.includes('alarma')) { bg = '#ffedd5'; color = '#7c2d12' } // orange
+      else if (s.includes('observ')) { bg = '#fef3c7'; color = '#92400e' } // yellow
+      else if (s.includes('bueno')) { bg = '#10b981'; color = '#ffffff' } // green (solid)
+      else if (s.includes('medic') || s.includes('s/med') || s.includes('sin medic')) { bg = '#d1d5db'; color = '#111827' } // gray
+      return `border:1px solid #ccc;padding:6px;text-align:center;background:${bg};color:${color}`
+    }
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i]
+      const key = it.equipment_name || 'Sin equipo'
+      if (!grouped[key]) grouped[key] = []
+      grouped[key].push(it)
+    }
+
+    for (const equipment in grouped) {
+      const group = grouped[equipment]
+      for (let j = 0; j < group.length; j++) {
+        const it = group[j]
+        rowsHtml += '<tr>'
+        rowsHtml += `<td style="border:1px solid #ccc;padding:6px;text-align:center">${it.item_number ?? ''}</td>`
+        if (j === 0) rowsHtml += `<td style="border:1px solid #ccc;padding:6px" rowspan="${group.length}">${equipment}</td>`
+        rowsHtml += `<td style="border:1px solid #ccc;padding:6px">${it.component ?? ''}</td>`
+  rowsHtml += `<td style="${conditionCellStyle(it.previous_condition)}">${it.previous_condition ?? ''}</td>`
+  rowsHtml += `<td style="${conditionCellStyle(it.current_condition)}">${it.current_condition ?? ''}</td>`
+        rowsHtml += `<td style="border:1px solid #ccc;padding:6px">${it.diagnosis ?? ''}</td>`
+        rowsHtml += `<td style="border:1px solid #ccc;padding:6px">${(it.observation || '-')}</td>`
+        rowsHtml += '</tr>'
+      }
+    }
+
+    const contentHtml = `
+      <style>
+        td, th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .report-header { display:flex; align-items:center; justify-content:space-between; }
+        .report-title { text-align:center; flex:1 }
+      </style>
+      <div style="font-family: Arial, Helvetica, sans-serif; color:#111; padding:12px; background:#fff;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="width:160px">
+            <img src="${logoImage}" alt="logo" style="height:60px;object-fit:contain" />
+          </div>
+          <div class="report-title">
+            <h1 style="margin:0 0 6px 0">${canonicalReport.report_name || canonicalReport.title || ''}</h1>
+            <div style="font-size:12px">${canonicalReport.report_date ? new Date(canonicalReport.report_date).toLocaleDateString('es-ES') : (canonicalReport.reportDate ? new Date(canonicalReport.reportDate).toLocaleDateString('es-ES') : '')}</div>
+            <div style="font-size:12px">${canonicalReport.location || canonicalReport.location || canonicalReport.plant || ''}</div>
+          </div>
+          <div style="width:160px;text-align:right;font-size:12px">
+            <div><strong>Empresa:</strong> ${companyName}</div>
+            <div><strong>Creado por:</strong> ${canonicalReport.created_by || canonicalReport.createdByUserId || canonicalReport.presentedBy || ''}</div>
+            <div><strong>Aprobado por:</strong> ${canonicalReport.approved_by || canonicalReport.reviewedBy || ''}</div>
+          </div>
+        </div>
+        <hr style="margin:12px 0" />
+        <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px;margin-bottom:12px">
+          <div style="padding:6px;background:#ecfdf5;border:1px solid #d1fae5">Bueno: ${report.summary?.good ?? 0}</div>
+          <div style="padding:6px;background:#fef3c7;border:1px solid #f5d08a">Observación: ${canonicalReport.summary?.observation ?? 0}</div>
+          <div style="padding:6px;background:#ffedd5;border:1px solid #f3b28a">Alarma: ${canonicalReport.summary?.alarm ?? 0}</div>
+          <div style="padding:6px;background:#fecaca;border:1px solid #f28a8a">Inaceptable: ${canonicalReport.summary?.inacceptable ?? 0}</div>
+          <div style="padding:6px;background:#e5e7eb;border:1px solid #cfcfcf">Sin medición: ${canonicalReport.summary?.no_measurement ?? 0}</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:12px">
+          <thead>
+            <tr>
+              <th style="padding:8px;border:1px solid #ccc">Item</th>
+              <th style="padding:8px;border:1px solid #ccc">Equipo</th>
+              <th style="padding:8px;border:1px solid #ccc">Activos</th>
+              <th style="padding:8px;border:1px solid #ccc">Condición anterior</th>
+              <th style="padding:8px;border:1px solid #ccc">Condición actual</th>
+              <th style="padding:8px;border:1px solid #ccc">Diagnóstico</th>
+              <th style="padding:8px;border:1px solid #ccc">Observaciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+      </div>
+    `
+
+    // Create offscreen container
+    const container = document.createElement('div')
+    container.style.position = 'fixed'
+    container.style.left = '-9999px'
+    container.style.top = '0'
+    container.innerHTML = contentHtml
+    document.body.appendChild(container)
+
+    // Helper to load html2pdf from CDN if not present
+    const loadHtml2Pdf = () => new Promise<void>((resolve, reject) => {
+      if ((window as any).html2pdf) return resolve()
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/html2pdf.js@0.9.3/dist/html2pdf.bundle.min.js'
+      script.onload = () => resolve()
+      script.onerror = () => reject(new Error('Failed to load html2pdf'))
+      document.head.appendChild(script)
+    })
+
+    try {
+      await loadHtml2Pdf()
+      const opt = {
+        margin:       10,
+        filename:     `${(report.report_name || 'reporte').replace(/[^a-z0-9\-\_ ]/gi,'').replace(/\s+/g,'_')}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }
+      await (window as any).html2pdf().set(opt).from(container).save()
+    } catch (err) {
+      // fallback: open printable window (previous behaviour)
+      const w = window.open('', '_blank')
+      if (w) {
+        w.document.open()
+        w.document.write(`<html><body>${contentHtml}</body></html>`)
+        w.document.close()
+        setTimeout(() => { try { w.print() } catch(e){} }, 300)
+      }
+    } finally {
+      // cleanup
+      setTimeout(() => {
+        try { document.body.removeChild(container) } catch(e) {}
+      }, 500)
     }
   }
 
@@ -228,10 +399,17 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar title="Reportes de Vibraciones" />
+      <Navbar title="Reportes de Vibraciones" companyName={
+        // show company name for client or selected company
+        user?.role === 'client' ? localCompanies.find(c => c.id === user.companyId)?.name : selectedCompany?.name
+      } />
 
       <div className="flex pt-24">
-        {user?.role === 'admin' && <Sidebar user={user} onLogout={onLogout} />}
+        {user?.role === 'admin' ? (
+          <Sidebar user={user} onLogout={onLogout} />
+        ) : (
+          <ClientSidebar user={user} onLogout={onLogout} />
+        )}
 
         <main className="flex-1 p-8 md:ml-64">
           <div className="fixed top-29 left-[280px] right-8 z-30 bg-white shadow rounded-lg md:rounded-xl border border-slate-100 h-[88.5%] ">
@@ -277,18 +455,22 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                   </div>
                 ) : !selectedBranch ? (
                   <div>
-                    <Breadcrumb />
+                    {/* Hide breadcrumb for clients (they should land directly in their company view) */}
+                    {user?.role !== 'client' && <Breadcrumb />}
                     
                     {/* Botón para agregar sucursal */}
                     <div className="flex justify-between items-center mb-4">
                       <h2 className="text-2xl font-semibold">Sucursales de {selectedCompany?.name}</h2>
-                      <button
-                        onClick={addBranch}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
-                      >
-                        <span className="text-lg">+</span>
-                        Agregar Sucursal
-                      </button>
+                      {/* Only admins can add branches */}
+                      {user?.role === 'admin' && (
+                        <button
+                          onClick={addBranch}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                        >
+                          <span className="text-lg">+</span>
+                          Agregar Sucursal
+                        </button>
+                      )}
                     </div>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -321,25 +503,31 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                     <Breadcrumb />
                     
                     {/* Controles superiores */}
-                    <div className="flex gap-3 mb-4">
-                      <button
-                        onClick={addMachinePoint}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
-                      >
-                        <span className="text-lg">+</span>
-                        Agregar Máquina
-                      </button>
+                      <div className="flex gap-3 mb-4">
+                      {/* Add machine button only for admins */}
+                      {user?.role === 'admin' && (
+                        <button
+                          onClick={addMachinePoint}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                        >
+                          <span className="text-lg">+</span>
+                          Agregar Máquina
+                        </button>
+                      )}
                       
-                      <button
-                        onClick={() => setIsEditMode(!isEditMode)}
-                        className={`px-4 py-2 rounded-lg transition flex items-center gap-2 ${
-                          isEditMode 
-                            ? 'bg-green-600 text-white hover:bg-green-700' 
-                            : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-                        }`}
-                      >
-                        {isEditMode ? '🔓 Desbloquear Posición' : '🔒 Bloquear Posición'}
-                      </button>
+                      {/* Edit mode toggle only for admins */}
+                      {user?.role === 'admin' && (
+                        <button
+                          onClick={() => setIsEditMode(!isEditMode)}
+                          className={`px-4 py-2 rounded-lg transition flex items-center gap-2 ${
+                            isEditMode 
+                              ? 'bg-green-600 text-white hover:bg-green-700' 
+                              : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+                          }`}
+                        >
+                          {isEditMode ? '🔓 Desbloquear Posición' : '🔒 Bloquear Posición'}
+                        </button>
+                      )}
 
                       <div className="flex-1"></div>
                       
@@ -375,43 +563,87 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                         />
                         
                         {/* Puntos de máquinas - posicionados relativos a la imagen */}
-                        {machinePoints.map(point => (
-                          <div
-                            key={point.id}
-                            className={`absolute w-8 h-8 transform -translate-x-1/2 -translate-y-1/2 ${
-                              isEditMode ? 'cursor-move' : 'cursor-pointer'
-                            }`}
-                            style={{ 
-                              left: `${point.x}%`, 
-                              top: `${point.y}%`,
-                              zIndex: draggingPoint === point.id ? 50 : 10
-                            }}
-                            onMouseDown={(e) => handlePointMouseDown(point.id, e)}
-                          >
-                            {/* Pin de ubicación */}
-                            <div className="relative">
-                              <div className={`absolute inset-0 rounded-full ${
-                                draggingPoint === point.id ? 'bg-blue-500' : 'bg-red-500'
-                              } opacity-20 animate-ping`}></div>
-                              <div className={`relative w-8 h-8 rounded-full ${
-                                draggingPoint === point.id ? 'bg-blue-600' : 'bg-red-600'
-                              } border-2 border-white shadow-lg flex items-center justify-center text-white font-bold text-sm`}>
-                                ⚙️
+                        {machinePoints.map(point => {
+                          // Obtener información de la máquina
+                          const machine = localMachines.find(m => m.id === point.machineId)
+                          
+                          // Obtener el último reporte de la máquina para determinar el color
+                          const machineReports = vibrationReports
+                            .filter(r => r.machine_id === point.machineId)
+                            .sort((a, b) => new Date(b.report_date).getTime() - new Date(a.report_date).getTime())
+                          const latestReport = machineReports[0]
+                          
+                          // Determinar el color según el estado
+                          let pointColor = 'bg-gray-500' // Sin reportes
+                          let pointColorPing = 'bg-gray-500'
+                          
+                          if (latestReport) {
+                            if (latestReport.summary.inacceptable > 0) {
+                              pointColor = 'bg-red-600'
+                              pointColorPing = 'bg-red-500'
+                            } else if (latestReport.summary.alarm > 0) {
+                              pointColor = 'bg-orange-500'
+                              pointColorPing = 'bg-orange-400'
+                            } else if (latestReport.summary.observation > 0) {
+                              pointColor = 'bg-yellow-500'
+                              pointColorPing = 'bg-yellow-400'
+                            } else {
+                              pointColor = 'bg-green-600'
+                              pointColorPing = 'bg-green-500'
+                            }
+                          }
+                          
+                          // Si está siendo arrastrado, usar azul
+                          if (draggingPoint === point.id) {
+                            pointColor = 'bg-blue-600'
+                            pointColorPing = 'bg-blue-500'
+                          }
+                          
+                          return (
+                            <div
+                              key={point.id}
+                              className={`absolute transform -translate-x-1/2 -translate-y-1/2 ${
+                                (user?.role === 'admin' && isEditMode) ? 'cursor-move' : 'cursor-pointer'
+                              }`}
+                              style={{ 
+                                left: `${point.x}%`, 
+                                top: `${point.y}%`,
+                                zIndex: draggingPoint === point.id ? 50 : 10
+                              }}
+                              onMouseDown={(e) => handlePointMouseDown(point.id, e)}
+                            >
+                              <div className="flex items-center gap-2">
+                                {/* Pin de ubicación */}
+                                <div className="relative w-8 h-8 flex-shrink-0">
+                                  <div className={`absolute inset-0 rounded-full ${pointColorPing} opacity-20 animate-ping`}></div>
+                                  <div className={`relative w-8 h-8 rounded-full ${pointColor} border-2 border-white shadow-lg flex items-center justify-center text-white font-bold text-sm`}>
+                                    ⚙️
+                                  </div>
+                                </div>
+                                
+                                {/* Nombre de la máquina */}
+                                {machine && (
+                                  <div className="bg-white/90 backdrop-blur-sm px-2 py-1 rounded shadow-md border border-gray-200 whitespace-nowrap">
+                                    <span className="text-xs font-semibold text-gray-800">
+                                      {machine.name}
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          )
+                        })}
                       </div>
                     </div>
 
                     {/* Modal de información de máquina */}
                     {showMachineModal && selectedMachinePoint && (
                       <div 
-                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50"
                         onClick={() => setShowMachineModal(false)}
                       >
                         <div 
-                          className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4"
+                          className="bg-white rounded-lg shadow-xl p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <div className="flex justify-between items-start mb-4">
@@ -429,45 +661,186 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                               const machine = localMachines.find(
                                 m => m.id === machinePoints.find(p => p.id === selectedMachinePoint)?.machineId
                               )
-                              return machine ? (
-                                <div className="bg-gray-50 p-4 rounded-lg">
-                                  <div className="space-y-3 text-sm">
-                                    <div className="flex items-start">
-                                      <span className="font-semibold text-gray-700 w-24">Nombre:</span>
-                                      <span className="text-gray-900">{machine.name}</span>
-                                    </div>
-                                    <div className="flex items-start">
-                                      <span className="font-semibold text-gray-700 w-24">Modelo:</span>
-                                      <span className="text-gray-900">{machine.model}</span>
-                                    </div>
-                                    <div className="flex items-start">
-                                      <span className="font-semibold text-gray-700 w-24">Serial:</span>
-                                      <span className="text-gray-900">{machine.serial}</span>
-                                    </div>
-                                    <div className="flex items-start">
-                                      <span className="font-semibold text-gray-700 w-24">Ubicación:</span>
-                                      <span className="text-gray-900">{machine.location}</span>
+                              
+                              if (!machine) {
+                                return (
+                                  <div className="bg-yellow-50 p-4 rounded-lg text-yellow-800 text-sm">
+                                    ⚠️ Esta máquina no tiene información asociada
+                                  </div>
+                                )
+                              }
+
+                              // Obtener reportes de esta máquina
+                              const machineReports = vibrationReports
+                                .filter(r => r.machine_id === machine.id)
+                                .sort((a, b) => new Date(b.report_date).getTime() - new Date(a.report_date).getTime())
+
+                              const latestReport = machineReports[0]
+
+                              // Función para determinar el color del estado
+                              const getConditionColor = (summary: any) => {
+                                if (summary.inacceptable > 0) return 'bg-red-100 text-red-800 border-red-300'
+                                if (summary.alarm > 0) return 'bg-orange-100 text-orange-800 border-orange-300'
+                                if (summary.observation > 0) return 'bg-yellow-100 text-yellow-800 border-yellow-300'
+                                return 'bg-green-100 text-green-800 border-green-300'
+                              }
+
+                              const getConditionText = (summary: any) => {
+                                if (summary.inacceptable > 0) return 'Inaceptable'
+                                if (summary.alarm > 0) return 'Alarma'
+                                if (summary.observation > 0) return 'Observación'
+                                return 'Bueno'
+                              }
+
+                              return (
+                                <>
+                                  {/* Información básica de la máquina */}
+                                  <div className="bg-gray-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-gray-800 mb-3">Datos de la Máquina</h4>
+                                    <div className="space-y-2 text-sm">
+                                      <div className="flex items-start">
+                                        <span className="font-semibold text-gray-700 w-24">Nombre:</span>
+                                        <span className="text-gray-900">{machine.name}</span>
+                                      </div>
+                                      <div className="flex items-start">
+                                        <span className="font-semibold text-gray-700 w-24">Modelo:</span>
+                                        <span className="text-gray-900">{machine.model}</span>
+                                      </div>
+                                      <div className="flex items-start">
+                                        <span className="font-semibold text-gray-700 w-24">Serial:</span>
+                                        <span className="text-gray-900">{machine.serial}</span>
+                                      </div>
+                                      <div className="flex items-start">
+                                        <span className="font-semibold text-gray-700 w-24">Ubicación:</span>
+                                        <span className="text-gray-900">{machine.location}</span>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              ) : (
-                                <div className="bg-yellow-50 p-4 rounded-lg text-yellow-800 text-sm">
-                                  ⚠️ Esta máquina no tiene información asociada
-                                </div>
+
+                                  {/* Estado actual */}
+                                  {latestReport ? (
+                                        <div className={`p-4 rounded-lg border-2 ${getConditionColor(latestReport.summary)}`}>
+                                          <div className="flex items-center justify-between mb-3">
+                                            <h4 className="font-bold text-lg">Estado Actual</h4>
+                                            <div className="flex items-center gap-2">
+                                              <span className="text-xs font-medium">
+                                                {new Date(latestReport.report_date).toLocaleDateString('es-ES', {
+                                                  year: 'numeric',
+                                                  month: 'long',
+                                                  day: 'numeric'
+                                                })}
+                                              </span>
+                                              <button
+                                                onClick={() => exportReportAsPDF(latestReport)}
+                                                className="px-2 py-1 bg-sky-600 text-white rounded-md hover:bg-sky-700 text-sm"
+                                              >
+                                                📄 Exportar PDF
+                                              </button>
+                                            </div>
+                                          </div>
+                                      <div className="text-2xl font-bold mb-2">
+                                        {getConditionText(latestReport.summary)}
+                                      </div>
+                                      <div className="grid grid-cols-5 gap-2 text-xs mt-3">
+                                        <div className="text-center">
+                                          <div className="font-semibold">{latestReport.summary.good}</div>
+                                          <div className="text-green-700">Bueno</div>
+                                        </div>
+                                        <div className="text-center">
+                                          <div className="font-semibold">{latestReport.summary.observation}</div>
+                                          <div className="text-yellow-700">Observ.</div>
+                                        </div>
+                                        <div className="text-center">
+                                          <div className="font-semibold">{latestReport.summary.alarm}</div>
+                                          <div className="text-orange-700">Alarma</div>
+                                        </div>
+                                        <div className="text-center">
+                                          <div className="font-semibold">{latestReport.summary.inacceptable}</div>
+                                          <div className="text-red-700">Inacept.</div>
+                                        </div>
+                                        <div className="text-center">
+                                          <div className="font-semibold">{latestReport.summary.no_measurement}</div>
+                                          <div className="text-gray-700">Sin med.</div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <div className="bg-gray-100 p-4 rounded-lg border-2 border-gray-300">
+                                      <div className="text-center text-gray-600">
+                                        <div className="text-4xl mb-2">📋</div>
+                                        <div className="font-semibold">Sin reportes registrados</div>
+                                        <div className="text-sm mt-1">Esta máquina aún no tiene inspecciones</div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Historial de reportes */}
+                                  {machineReports.length > 0 && (
+                                    <div>
+                                      <h4 className="font-semibold text-gray-800 mb-3">
+                                        Historial de Reportes ({machineReports.length})
+                                      </h4>
+                                      <div className="space-y-2 max-h-64 overflow-y-auto">
+                                        {machineReports.map(report => (
+                                          <div 
+                                            key={report.report_id}
+                                            className="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-md transition cursor-pointer"
+                                            onClick={() => {
+                                              setSelectedReport(report)
+                                              setShowReportDetailModal(true)
+                                            }}
+                                          >
+                                            <div className="flex items-start justify-between">
+                                              <div className="flex-1">
+                                                <div className="font-semibold text-gray-800 text-sm">
+                                                  {report.report_name}
+                                                </div>
+                                                <div className="text-xs text-gray-600 mt-1">
+                                                  {new Date(report.report_date).toLocaleDateString('es-ES', {
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric'
+                                                  })}
+                                                </div>
+                                                <div className="text-xs text-gray-500 mt-1">
+                                                  Inspector: {report.created_by}
+                                                </div>
+                                              </div>
+                                              <div className="flex items-center gap-2">
+                                                <div className={`px-2 py-1 rounded text-xs font-medium ${getConditionColor(report.summary)}`}>
+                                                  {getConditionText(report.summary)}
+                                                </div>
+                                                <button
+                                                  onClick={(e) => { e.stopPropagation(); exportReportAsPDF(report) }}
+                                                  className="px-2 py-1 bg-sky-600 text-white rounded-md hover:bg-sky-700 text-sm"
+                                                >
+                                                  📄
+                                                </button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                </>
                               )
                             })()}
 
                             <div className="flex gap-2 pt-4">
-                              <button
-                                onClick={() => {
-                                  deleteMachinePoint(selectedMachinePoint)
-                                  setShowMachineModal(false)
-                                  setSelectedMachinePoint(null)
-                                }}
-                                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-                              >
-                                Eliminar Punto
-                              </button>
+                              {/* Only admins can delete points */}
+                              {user?.role === 'admin' ? (
+                                <button
+                                  onClick={() => {
+                                    deleteMachinePoint(selectedMachinePoint)
+                                    setShowMachineModal(false)
+                                    setSelectedMachinePoint(null)
+                                  }}
+                                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                                >
+                                  Eliminar Punto
+                                </button>
+                              ) : null}
                               <button
                                 onClick={() => setShowMachineModal(false)}
                                 className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
@@ -483,7 +856,7 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                     {/* Formulario para agregar nueva máquina */}
                     {showAddMachineForm && (
                       <div 
-                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50"
                         onClick={() => setShowAddMachineForm(false)}
                       >
                         <div 
@@ -580,7 +953,7 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                     {/* Formulario para agregar nueva sucursal */}
                     {showAddBranchForm && (
                       <div 
-                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                        className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50"
                         onClick={() => setShowAddBranchForm(false)}
                       >
                         <div 
@@ -656,6 +1029,193 @@ export default function ReportesVibraciones({ user, onLogout }:{ user:any, onLog
                               </button>
                             </div>
                           </form>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Modal de detalle del reporte */}
+                    {showReportDetailModal && selectedReport && (
+                      <div 
+                        className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-[60]"
+                        onClick={() => {
+                          setShowReportDetailModal(false)
+                          setSelectedReport(null)
+                        }}
+                      >
+                        <div 
+                          className="bg-white rounded-lg shadow-2xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {/* Header del reporte */}
+                          <div className="flex justify-between items-start mb-6">
+                            <div className="flex-1">
+                              <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                                {selectedReport.report_name}
+                              </h3>
+                              <div className="flex items-center gap-4 text-sm text-gray-600">
+                                <span className="flex items-center gap-1">
+                                  📅 {new Date(selectedReport.report_date).toLocaleDateString('es-ES', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                  })}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  📍 {selectedReport.location}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => exportReportAsPDF(selectedReport)}
+                                className="px-3 py-1 bg-sky-600 text-white rounded-md hover:bg-sky-700 text-sm"
+                              >
+                                📄 Exportar PDF
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setShowReportDetailModal(false)
+                                  setSelectedReport(null)
+                                }}
+                                className="text-gray-400 hover:text-gray-600 text-2xl"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Información del reporte */}
+                          <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div className="bg-gray-50 p-4 rounded-lg">
+                              <div className="text-xs text-gray-600 mb-1">Creado por</div>
+                              <div className="font-semibold text-gray-800">{selectedReport.created_by}</div>
+                            </div>
+                            <div className="bg-gray-50 p-4 rounded-lg">
+                              <div className="text-xs text-gray-600 mb-1">Aprobado por</div>
+                              <div className="font-semibold text-gray-800">{selectedReport.approved_by}</div>
+                            </div>
+                          </div>
+
+                          {/* Resumen del estado */}
+                          <div className="mb-6">
+                            <h4 className="font-bold text-lg text-gray-800 mb-3">Resumen de Inspección</h4>
+                            <div className="grid grid-cols-5 gap-3">
+                              <div className="bg-green-50 border-2 border-green-200 rounded-lg p-3 text-center">
+                                <div className="text-3xl font-bold text-green-700">{selectedReport.summary.good}</div>
+                                <div className="text-xs text-green-600 mt-1">Bueno</div>
+                              </div>
+                              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-3 text-center">
+                                <div className="text-3xl font-bold text-yellow-700">{selectedReport.summary.observation}</div>
+                                <div className="text-xs text-yellow-600 mt-1">Observación</div>
+                              </div>
+                              <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-3 text-center">
+                                <div className="text-3xl font-bold text-orange-700">{selectedReport.summary.alarm}</div>
+                                <div className="text-xs text-orange-600 mt-1">Alarma</div>
+                              </div>
+                              <div className="bg-red-50 border-2 border-red-200 rounded-lg p-3 text-center">
+                                <div className="text-3xl font-bold text-red-700">{selectedReport.summary.inacceptable}</div>
+                                <div className="text-xs text-red-600 mt-1">Inaceptable</div>
+                              </div>
+                              <div className="bg-gray-50 border-2 border-gray-200 rounded-lg p-3 text-center">
+                                <div className="text-3xl font-bold text-gray-700">{selectedReport.summary.no_measurement}</div>
+                                <div className="text-xs text-gray-600 mt-1">Sin medición</div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Items de inspección - Formato Tabla */}
+                          <div className="overflow-x-auto">
+                            <h4 className="font-bold text-lg text-gray-800 mb-3">
+                              Detalle de Inspección ({selectedReport.items.length} items)
+                            </h4>
+                            <table className="w-full border-collapse">
+                              <thead>
+                                <tr className="bg-blue-600 text-white">
+                                  <th className="border border-blue-700 px-3 py-2 text-sm font-semibold text-center w-12">Item</th>
+                                  <th className="border border-blue-700 px-3 py-2 text-sm font-semibold text-center w-32">Equipo</th>
+                                  <th className="border border-blue-700 px-3 py-2 text-sm font-semibold text-center w-32">Activos</th>
+                                  <th className="border border-blue-700 px-3 py-2 text-sm font-semibold text-center w-32">Condición anterior</th>
+                                  <th className="border border-blue-700 px-3 py-2 text-sm font-semibold text-center w-32">Condición actual</th>
+                                  <th className="border border-blue-700 px-3 py-2 text-sm font-semibold text-center">Diagnóstico</th>
+                                  <th className="border border-blue-700 px-3 py-2 text-sm font-semibold text-center">Observaciones y Recomendaciones</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {(() => {
+                                  // Agrupar items por equipo
+                                  const groupedItems: { [key: string]: any[] } = {}
+                                  selectedReport.items.forEach((item: any) => {
+                                    if (!groupedItems[item.equipment_name]) {
+                                      groupedItems[item.equipment_name] = []
+                                    }
+                                    groupedItems[item.equipment_name].push(item)
+                                  })
+
+                                  const getCellColor = (condition: string) => {
+                                    if (condition.toLowerCase().includes('inaceptable')) return 'bg-red-500 text-white'
+                                    if (condition.toLowerCase().includes('alarma')) return 'bg-orange-400 text-black'
+                                    if (condition.toLowerCase().includes('observ')) return 'bg-yellow-400 text-black'
+                                    if (condition.toLowerCase().includes('bueno')) return 'bg-green-500 text-white'
+                                    if (condition.toLowerCase().includes('medición') || condition.toLowerCase().includes('s/medición')) return 'bg-gray-300 text-black'
+                                    return 'bg-white text-black'
+                                  }
+
+                                  const rows: any[] = []
+                                  
+                                  Object.entries(groupedItems).forEach(([equipmentName, items]) => {
+                                    items.forEach((item: any, index: number) => {
+                                      rows.push(
+                                        <tr key={item.item_number} className="hover:bg-gray-50">
+                                          <td className="border border-gray-300 px-3 py-2 text-center text-sm font-semibold">
+                                            {item.item_number}
+                                          </td>
+                                          {/* Solo mostrar el nombre del equipo en la primera fila del grupo */}
+                                          {index === 0 && (
+                                            <td 
+                                              className="border border-gray-300 px-3 py-2 text-sm font-semibold text-center align-middle"
+                                              rowSpan={items.length}
+                                            >
+                                              {equipmentName}
+                                            </td>
+                                          )}
+                                          <td className="border border-gray-300 px-3 py-2 text-sm">
+                                            {item.component}
+                                          </td>
+                                          <td className={`border border-gray-300 px-3 py-2 text-center text-sm font-semibold ${getCellColor(item.previous_condition)}`}>
+                                            {item.previous_condition}
+                                          </td>
+                                          <td className={`border border-gray-300 px-3 py-2 text-center text-sm font-semibold ${getCellColor(item.current_condition)}`}>
+                                            {item.current_condition}
+                                          </td>
+                                          <td className="border border-gray-300 px-3 py-2 text-sm">
+                                            {item.diagnosis}
+                                          </td>
+                                          <td className="border border-gray-300 px-3 py-2 text-sm bg-blue-100">
+                                            {item.observation || '-'}
+                                          </td>
+                                        </tr>
+                                      )
+                                    })
+                                  })
+
+                                  return rows
+                                })()}
+                              </tbody>
+                            </table>
+                          </div>
+
+                          {/* Botón cerrar */}
+                          <div className="mt-6 flex justify-end">
+                            <button
+                              onClick={() => {
+                                setShowReportDetailModal(false)
+                                setSelectedReport(null)
+                              }}
+                              className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+                            >
+                              Cerrar
+                            </button>
+                          </div>
                         </div>
                       </div>
                     )}
